@@ -1,2 +1,2 @@
 # schematics
-Terraform and Schematics templates for IBM Cloud Kubernetes Service to be used
+Terraform and Schematics templates for IBM Cloud Kubernetes Service
