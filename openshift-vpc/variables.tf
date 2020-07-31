@@ -32,7 +32,7 @@ variable "name" {
 }
 
 variable "kube_version" {
-  default = "4.3.23_openshift"
+  default = "4.3.28_openshift"
 }
 
 variable "vpc_name" {
