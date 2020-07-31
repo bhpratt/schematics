@@ -15,13 +15,9 @@ variable "name" {
   default = "cluster"
 }
 
-variable "public_vlan_id" {
-  default = "2212469"
-}
+variable "public_vlan_id" {}
 
-variable "private_vlan_id" {
-  default = "2212471"
-}
+variable "private_vlan_id" {}
 
 variable "datacenter" {
   default = "wdc07"
