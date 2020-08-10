@@ -65,6 +65,8 @@ resource "ibm_container_vpc_cluster" "cluster" {
   flavor            = var.flavor
   worker_count      = var.worker_count
   resource_group_id = data.ibm_resource_group.resource_group.id
+  # Lets the user start working with the cluster as soon as a node is available
+  wait_till         = OneWorkerNodeReady
 
   zones {
     subnet_id = ibm_is_subnet.subnet1.id
