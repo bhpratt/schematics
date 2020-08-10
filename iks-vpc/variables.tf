@@ -22,4 +22,8 @@ variable "vpc_name" {
   default = "vpz"
 }
 
+variable "classic_access" {
+  default = "false"
+}
+
 variable "ibmcloud_api_key" {}

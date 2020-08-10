@@ -8,7 +8,8 @@ provider "ibm" {
 # name of VPC
 resource "ibm_is_vpc" "vpc1" {
   name = var.vpc_name
-#  classic_access = true
+  # Only one VPC per region can have classic access
+  classic_access = var.classic_access
 }
 
 # name of resource group
