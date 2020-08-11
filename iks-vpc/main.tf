@@ -75,13 +75,13 @@ resource "ibm_container_vpc_cluster" "cluster" {
   }
 
   # uncomment to create a multizone cluster
-  # zones {
-  #   subnet_id = ibm_is_subnet.subnet2.id
-  #   name      = "${var.region}-2"
-  # }
+  zones {
+    subnet_id = ibm_is_subnet.subnet2.id
+    name      = "${var.region}-2"
+  }
 
-  # zones {
-  #   subnet_id = ibm_is_subnet.subnet3.id
-  #   name      = "${var.region}-3"
-  # }
+  zones {
+    subnet_id = ibm_is_subnet.subnet3.id
+    name      = "${var.region}-3"
+  }
 }
