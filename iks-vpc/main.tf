@@ -37,12 +37,24 @@ resource "ibm_is_security_group_rule" "security_group_rule_default_tcp" {
     }
  }
 
+ resource "ibm_is_public_gateway" "gateway_subnet1" {
+    name       = "vpcgen2-iks-gateway"
+    vpc        = ibm_is_vpc.vpc1.id
+    zone       = "${var.region}-1"
+
+    //User can configure timeouts
+    timeouts {
+        create = "90m"
+    }
+}
+
 # VPC subnets. Uses default CIDR range
 resource "ibm_is_subnet" "subnet1" {
   name                     = "${var.region}-1"
   vpc                      = ibm_is_vpc.vpc1.id
   zone                     = "${var.region}-1"
   total_ipv4_address_count = 256
+  public_gateway           = ibm_is_public_gateway.gateway_subnet1.id
 }
 
 resource "ibm_is_subnet" "subnet2" {
