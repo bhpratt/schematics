@@ -37,6 +37,7 @@ resource "ibm_is_security_group_rule" "security_group_rule_default_tcp" {
     }
  }
 
+ # Include public gateway for connectivity outside of VPC
  resource "ibm_is_public_gateway" "gateway_subnet1" {
     name       = "vpcgen2-iks-gateway"
     vpc        = ibm_is_vpc.vpc1.id
@@ -78,7 +79,7 @@ resource "ibm_container_vpc_cluster" "cluster" {
   flavor            = var.flavor
   worker_count      = var.worker_count
   resource_group_id = data.ibm_resource_group.resource_group.id
-  # Lets the Schematics/Terraform start working with the cluster as soon as a node is available
+  # Lets Schematics/Terraform start working with the cluster as soon as a node is available
   wait_till         = "OneWorkerNodeReady"
 
   zones {
@@ -87,13 +88,13 @@ resource "ibm_container_vpc_cluster" "cluster" {
   }
 
   # uncomment to create a multizone cluster
-  zones {
-    subnet_id = ibm_is_subnet.subnet2.id
-    name      = "${var.region}-2"
-  }
+  # zones {
+  #   subnet_id = ibm_is_subnet.subnet2.id
+  #   name      = "${var.region}-2"
+  # }
 
-  zones {
-    subnet_id = ibm_is_subnet.subnet3.id
-    name      = "${var.region}-3"
-  }
+  # zones {
+  #   subnet_id = ibm_is_subnet.subnet3.id
+  #   name      = "${var.region}-3"
+  # }
 }
