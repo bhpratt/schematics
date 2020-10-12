@@ -28,13 +28,11 @@ variable "resource_group" {
 }
 
 variable "name" {
-  default = "cluster"
+  default = "vpc-gen2-roks"
 }
 
-variable "kube_version" {
-  default = "4.3.28_openshift"
-}
+variable "kube_version" {}
 
 variable "vpc_name" {
-  default = "vpz"
+  default = "vpz-openshift"
 }
