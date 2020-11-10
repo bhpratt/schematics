@@ -31,4 +31,4 @@ variable "namespace" {
   default = "cli-tool"
 }
 
-# variable "key" {}
+variable "test" {}
