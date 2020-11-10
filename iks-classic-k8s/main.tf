@@ -4,12 +4,12 @@ provider "ibm" {
 }
 
 provider "kubernetes" {
-  config_path = "${data.ibm_container_cluster_config.clusterConfig.config_file_path}"
+  config_path = data.ibm_container_cluster_config.clusterConfig.config_file_path
 }
 
 data "ibm_container_cluster_config" "clusterConfig" {
 
-  cluster_name_id = "${var.cluster_id}"
+  cluster_name_id = var.name
   config_dir = "/tmp"
 }
 
