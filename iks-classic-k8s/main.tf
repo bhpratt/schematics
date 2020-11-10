@@ -33,7 +33,7 @@ resource "ibm_container_cluster" "cluster" {
   public_service_endpoint  = "true"
 }
 
-resource "kubernetes_namespace" "new-ns" {
+resource "kubernetes_namespace" "newNamespace" {
   metadata {
     name = var.namespace
   }
@@ -43,13 +43,35 @@ resource "kubernetes_namespace" "new-ns" {
   ]
 }
 
-resource "kubernetes_secret" "example" {
+resource "kubernetes_secret" "loginSecret" {
   metadata {
-    name = "basic-auth"
+    name = "login"
     namespace = var.namespace
   }
 
   data = {
-    "login" = var.test
+    "login" = var.login_key
+  }
+}
+
+resource "kubernetes_secret" "stagingSecret" {
+  metadata {
+    name = "staging"
+    namespace = var.namespace
+  }
+
+  data = {
+    "login-staging" = var.staging_key
+  }
+}
+
+resource "kubernetes_secret" "ibmcloudCliSecret" {
+  metadata {
+    name = "ibm-cloud-cli"
+    namespace = var.namespace
+  }
+
+  data = {
+    "apikey" = var.ibmcloud_cli_key
   }
 }
