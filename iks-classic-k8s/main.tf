@@ -3,7 +3,16 @@ provider "ibm" {
   region = var.region
 }
 
-provider "kubernetes" {}
+provider "kubernetes" {
+  config_path = "${data.ibm_container_cluster_config.clusterConfig.config_file_path}"
+}
+
+data "ibm_container_cluster_config" "clusterConfig" {
+
+  cluster_name_id = "${var.cluster_id}"
+  config_dir = "/tmp"
+}
+
 
 # name of resource group
 data "ibm_resource_group" "resource_group" {
@@ -34,14 +43,14 @@ resource "kubernetes_namespace" "new-ns" {
   ]
 }
 
-# resource "kubernetes_secret" "example" {
-#   metadata {
-#     name = "basic-auth"
-#     namespace = var.namespace
-#   }
+resource "kubernetes_secret" "example" {
+  metadata {
+    name = "basic-auth"
+    namespace = var.namespace
+  }
 
-#   data = {
-#     username = "admin"
-#     password = "passw4rd"
-#   }
-# }
+  data = {
+    username = var.test
+    password = "passw4rd"
+  }
+}
