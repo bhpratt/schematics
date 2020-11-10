@@ -43,14 +43,14 @@ resource "kubernetes_namespace" "new-ns" {
   ]
 }
 
-resource "kubernetes_secret" "example" {
-  metadata {
-    name = "basic-auth"
-    namespace = var.namespace
-  }
+# resource "kubernetes_secret" "example" {
+#   metadata {
+#     name = "basic-auth"
+#     namespace = var.namespace
+#   }
 
-  data = {
-    username = var.test
-    password = "passw4rd"
-  }
-}
+#   data = {
+#     username = var.test
+#     password = "passw4rd"
+#   }
+# }
