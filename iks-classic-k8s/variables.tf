@@ -28,7 +28,7 @@ variable "default_pool_size" {
 }
 
 variable "namespace" {
-  default = cli-tool
+  default = "cli-tool"
 }
 
 # variable "key" {}
