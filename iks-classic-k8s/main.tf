@@ -26,7 +26,7 @@ resource "ibm_container_cluster" "cluster" {
 
 resource "kubernetes_namespace" "new-ns" {
   metadata {
-    name = var.namespace
+    name = "initial-name"
   }
 }
 
