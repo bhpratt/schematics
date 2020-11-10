@@ -29,7 +29,9 @@ resource "kubernetes_namespace" "new-ns" {
     name = var.namespace
   }
 
-  depends_on = ibm_container_cluster.cluster
+  depends_on = [
+    ibm_container_cluster.cluster,
+  ]
 }
 
 # resource "kubernetes_secret" "example" {
