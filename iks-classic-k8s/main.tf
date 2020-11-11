@@ -7,13 +7,6 @@ provider "kubernetes" {
   config_path = data.ibm_container_cluster_config.clusterConfig.config_file_path
 }
 
-data "ibm_container_cluster_config" "clusterConfig" {
-
-  cluster_name_id = var.name
-  config_dir = "/tmp"
-}
-
-
 # name of resource group
 data "ibm_resource_group" "resource_group" {
   name = var.resource_group
