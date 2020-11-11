@@ -33,6 +33,12 @@ resource "ibm_container_cluster" "cluster" {
   public_service_endpoint  = "true"
 }
 
+data "ibm_container_cluster_config" "clusterConfig" {
+
+  cluster_name_id = var.name
+  config_dir = "/tmp"
+}
+
 resource "kubernetes_namespace" "newNamespace" {
   metadata {
     name = var.namespace
