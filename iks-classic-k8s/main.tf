@@ -30,6 +30,9 @@ data "ibm_container_cluster_config" "clusterConfig" {
 
   cluster_name_id = var.name
   config_dir = "/tmp"
+  depends_on = [
+    ibm_container_cluster.cluster,
+  ]
 }
 
 resource "kubernetes_namespace" "newNamespace" {
