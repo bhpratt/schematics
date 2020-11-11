@@ -42,7 +42,7 @@ resource "kubernetes_namespace" "newNamespace" {
     name = var.namespace
   }
   depends_on = [
-    ibm_container_cluster.cluster,
+    ibm_container_cluster_config.clusterConfig,
   ]
 }
 
