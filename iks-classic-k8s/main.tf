@@ -40,7 +40,7 @@ resource "kubernetes_namespace" "newNamespace" {
     name = var.namespace
   }
   depends_on = [
-    ibm_container_cluster_config.clusterConfig,
+    provider.kubernetes,
     ibm_container_cluster.cluster,
   ]
 }
@@ -55,7 +55,7 @@ resource "kubernetes_secret" "loginSecret" {
     "login" = var.login_key
   }
   depends_on = [
-    ibm_container_cluster_config.clusterConfig,
+    provider.kubernetes,
   ]
 }
 
@@ -69,7 +69,7 @@ resource "kubernetes_secret" "stagingSecret" {
     "login-staging" = var.staging_key
   }
   depends_on = [
-    ibm_container_cluster_config.clusterConfig,
+    provider.kubernetes,
   ]
 }
 
@@ -83,7 +83,7 @@ resource "kubernetes_secret" "ibmcloudCliSecret" {
     "apikey" = var.ibmcloud_cli_key
   }
   depends_on = [
-    ibm_container_cluster_config.clusterConfig,
+    provider.kubernetes,
   ]
 }
 
