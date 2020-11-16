@@ -53,6 +53,9 @@ resource "kubernetes_secret" "loginSecret" {
   data = {
     "login" = var.login_key
   }
+  depends_on = [
+    ibm_container_cluster.cluster,
+  ]
 }
 
 resource "kubernetes_secret" "stagingSecret" {
@@ -64,6 +67,9 @@ resource "kubernetes_secret" "stagingSecret" {
   data = {
     "login-staging" = var.staging_key
   }
+  depends_on = [
+    ibm_container_cluster.cluster,
+  ]
 }
 
 resource "kubernetes_secret" "ibmcloudCliSecret" {
@@ -75,6 +81,9 @@ resource "kubernetes_secret" "ibmcloudCliSecret" {
   data = {
     "apikey" = var.ibmcloud_cli_key
   }
+  depends_on = [
+    ibm_container_cluster.cluster,
+  ]
 }
 
 # resource "null_resource" "example1" {
