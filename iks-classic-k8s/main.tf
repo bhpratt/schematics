@@ -30,19 +30,18 @@ data "ibm_container_cluster_config" "clusterConfig" {
 
   cluster_name_id = var.name
   config_dir = "/tmp"
-  depends_on = [
-    ibm_container_cluster.cluster,
-  ]
+  # depends_on = [
+  #   ibm_container_cluster.cluster,
+  # ]
 }
 
 resource "kubernetes_namespace" "newNamespace" {
   metadata {
     name = var.namespace
   }
-  depends_on = [
-    provider.kubernetes,
-    ibm_container_cluster.cluster,
-  ]
+  # depends_on = [
+  #   ibm_container_cluster.cluster,
+  # ]
 }
 
 resource "kubernetes_secret" "loginSecret" {
@@ -54,9 +53,8 @@ resource "kubernetes_secret" "loginSecret" {
   data = {
     "login" = var.login_key
   }
-  depends_on = [
-    provider.kubernetes,
-  ]
+  # depends_on = [
+  # ]
 }
 
 resource "kubernetes_secret" "stagingSecret" {
@@ -68,9 +66,8 @@ resource "kubernetes_secret" "stagingSecret" {
   data = {
     "login-staging" = var.staging_key
   }
-  depends_on = [
-    provider.kubernetes,
-  ]
+  # depends_on = [
+  # ]
 }
 
 resource "kubernetes_secret" "ibmcloudCliSecret" {
@@ -82,9 +79,9 @@ resource "kubernetes_secret" "ibmcloudCliSecret" {
   data = {
     "apikey" = var.ibmcloud_cli_key
   }
-  depends_on = [
-    provider.kubernetes,
-  ]
+  # depends_on = [
+  #   provider.kubernetes,
+  # ]
 }
 
 # resource "null_resource" "example1" {
