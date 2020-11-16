@@ -28,7 +28,7 @@ resource "ibm_container_cluster" "cluster" {
 
 data "ibm_container_cluster_config" "clusterConfig" {
 
-  cluster_name_id = var.name
+  cluster_name_id = ibm_container_cluster.cluster.name
   config_dir = "/tmp"
   # depends_on = [
   #   ibm_container_cluster.cluster,
