@@ -3,6 +3,7 @@ provider "ibm" {
   region = var.region
 }
 
+# review this doc: https://cloud.ibm.com/docs/terraform?topic=terraform-container-data-sources#container-cluster-config-sample
 provider "kubernetes" {
   config_path = data.ibm_container_cluster_config.clusterConfig.config_file_path
 }
@@ -24,6 +25,7 @@ resource "ibm_container_cluster" "cluster" {
   default_pool_size = var.default_pool_size
   private_service_endpoint = "true"
   public_service_endpoint  = "true"
+  wait_till         = "OneWorkerNodeReady"
 }
 
 data "ibm_container_cluster_config" "clusterConfig" {
