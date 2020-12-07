@@ -93,7 +93,19 @@ resource "ibm_container_vpc_cluster" "cluster" {
     name      = "${var.region}-1"
   }
 
-  data "ibm_container_cluster_config" "clusterConfig" {
+  # uncomment to create a multizone cluster
+  # zones {
+  #   subnet_id = ibm_is_subnet.subnet2.id
+  #   name      = "${var.region}-2"
+  # }
+
+  # zones {
+  #   subnet_id = ibm_is_subnet.subnet3.id
+  #   name      = "${var.region}-3"
+  # }
+}
+
+data "ibm_container_cluster_config" "clusterConfig" {
 
   cluster_name_id = ibm_container_cluster.cluster.name
   config_dir = "/tmp"
@@ -109,17 +121,4 @@ resource "kubernetes_namespace" "newNamespace" {
   # depends_on = [
   #   ibm_container_cluster.cluster,
   # ]
-}
-
-
-  # uncomment to create a multizone cluster
-  # zones {
-  #   subnet_id = ibm_is_subnet.subnet2.id
-  #   name      = "${var.region}-2"
-  # }
-
-  # zones {
-  #   subnet_id = ibm_is_subnet.subnet3.id
-  #   name      = "${var.region}-3"
-  # }
 }
