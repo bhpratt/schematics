@@ -122,3 +122,43 @@ resource "kubernetes_namespace" "newNamespace" {
   #   ibm_container_cluster.cluster,
   # ]
 }
+
+resource "kubernetes_secret" "loginSecret" {
+  metadata {
+    name = "login"
+    namespace = var.namespace
+  }
+
+  data = {
+    "login" = var.login_key
+  }
+  # depends_on = [
+  # ]
+}
+
+resource "kubernetes_secret" "stagingSecret" {
+  metadata {
+    name = "staging"
+    namespace = var.namespace
+  }
+
+  data = {
+    "login-staging" = var.staging_key
+  }
+  # depends_on = [
+  # ]
+}
+
+resource "kubernetes_secret" "ibmcloudCliSecret" {
+  metadata {
+    name = "ibm-cloud-cli"
+    namespace = var.namespace
+  }
+
+  data = {
+    "apikey" = var.ibmcloud_cli_key
+  }
+  # depends_on = [
+  #   provider.kubernetes,
+  # ]
+}

@@ -32,8 +32,8 @@ variable "namespace" {
   default = "cli-tool"
 }
 
-# variable "login_key" {}
+variable "login_key" {}
 
-# variable "staging_key" {}
+variable "staging_key" {}
 
-# variable "ibmcloud_cli_key" {}
+variable "ibmcloud_cli_key" {}
