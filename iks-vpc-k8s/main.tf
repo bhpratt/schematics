@@ -79,7 +79,7 @@ resource "ibm_is_subnet" "subnet3" {
 }
 
 # IKS cluster. Single zone.
-resource "" "cluster" {
+resource "ibm_container_vpc_cluster" "cluster" {
   name              = var.name
   vpc_id            = ibm_is_vpc.vpc1.id
   flavor            = var.flavor
@@ -110,7 +110,7 @@ data "ibm_container_cluster_config" "clusterConfig" {
   cluster_name_id = ibm_container_vpc_cluster.cluster.name
   config_dir = "/tmp"
   # depends_on = [
-  #   ibm_container_vpc_cluster.cluster,
+  #   ibm_container_cluster.cluster,
   # ]
 }
 
@@ -119,6 +119,6 @@ resource "kubernetes_namespace" "newNamespace" {
     name = var.namespace
   }
   # depends_on = [
-  #   ibm_container_vpc_cluster.cluster,
+  #   ibm_container_cluster.cluster,
   # ]
 }
