@@ -7,7 +7,7 @@ provider "ibm" {
 
 # review this doc: https://cloud.ibm.com/docs/terraform?topic=terraform-container-data-sources#container-cluster-config-sample
 provider "kubernetes" {
-  config_path = data.ibm_container_vpc_cluster_config.clusterConfig.config_file_path
+  config_path = data.ibm_container_cluster_config.clusterConfig.config_file_path
 }
 
 
@@ -105,7 +105,7 @@ resource "" "cluster" {
   # }
 }
 
-data "ibm_container_vpc_cluster_config" "clusterConfig" {
+data "ibm_container_cluster_config" "clusterConfig" {
 
   cluster_name_id = ibm_container_vpc_cluster.cluster.name
   config_dir = "/tmp"
