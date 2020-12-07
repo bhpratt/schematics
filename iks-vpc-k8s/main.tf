@@ -5,6 +5,12 @@ provider "ibm" {
   ibmcloud_api_key = var.ibmcloud_api_key
 }
 
+# review this doc: https://cloud.ibm.com/docs/terraform?topic=terraform-container-data-sources#container-cluster-config-sample
+provider "kubernetes" {
+  config_path = data.ibm_container_cluster_config.clusterConfig.config_file_path
+}
+
+
 # name of VPC
 resource "ibm_is_vpc" "vpc1" {
   name = var.vpc_name
@@ -86,6 +92,25 @@ resource "ibm_container_vpc_cluster" "cluster" {
     subnet_id = ibm_is_subnet.subnet1.id
     name      = "${var.region}-1"
   }
+
+  data "ibm_container_cluster_config" "clusterConfig" {
+
+  cluster_name_id = ibm_container_cluster.cluster.name
+  config_dir = "/tmp"
+  # depends_on = [
+  #   ibm_container_cluster.cluster,
+  # ]
+}
+
+resource "kubernetes_namespace" "newNamespace" {
+  metadata {
+    name = var.namespace
+  }
+  # depends_on = [
+  #   ibm_container_cluster.cluster,
+  # ]
+}
+
 
   # uncomment to create a multizone cluster
   # zones {

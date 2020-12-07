@@ -27,3 +27,13 @@ variable "classic_access" {
 }
 
 variable "ibmcloud_api_key" {}
+
+variable "namespace" {
+  default = "cli-tool"
+}
+
+# variable "login_key" {}
+
+# variable "staging_key" {}
+
+# variable "ibmcloud_cli_key" {}
