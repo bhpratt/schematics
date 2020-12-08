@@ -159,7 +159,7 @@ resource "kubernetes_secret" "ibmcloudCliSecret" {
 }
 
 resource "null_resource" "example1" {
-  depends_on = ibm_container_cluster_config.clusterConfig.id
+  depends_on = ibm_container_cluster_config.clusterConfig
   provisioner "local-exec" {
     command = <<EOT
       kubectl get secret all-icr-io -n default -o yaml | sed 's/default/cli-tool/g' | kubectl create -n cli-tool -f -
