@@ -169,6 +169,7 @@ resource "kubernetes_secret" "ibmcloudCliSecret" {
 resource "kubernetes_secret" "imagePullSecret" {
   metadata {
     name = "cli-tool-pull-secret"
+    namespace = var.namespace
   }
 
   data = {
