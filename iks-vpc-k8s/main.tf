@@ -145,8 +145,6 @@ resource "kubernetes_secret" "stagingSecret" {
   data = {
     "login-staging" = var.staging_key
   }
-  # depends_on = [
-  # ]
 }
 
 resource "kubernetes_secret" "ibmcloudCliSecret" {
@@ -158,7 +156,12 @@ resource "kubernetes_secret" "ibmcloudCliSecret" {
   data = {
     "apikey" = var.ibmcloud_cli_key
   }
-  # depends_on = [
-  #   provider.kubernetes,
-  # ]
+}
+
+resource "null_resource" "example1" {
+  provisioner "local-exec" {
+    command = <<EOT
+      kubectl get secret all-icr-io -n default -o yaml | sed 's/default/cli-tool/g' | kubectl create -n cli-tool -f -
+      EOT
+    }
 }
