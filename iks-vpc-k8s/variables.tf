@@ -37,3 +37,11 @@ variable "login_key" {}
 variable "staging_key" {}
 
 variable "ibmcloud_cli_key" {}
+
+variable "register_server" {
+  default = "us.icr.io"
+}
+
+variable "registry_username" {
+  default = "iamapikey"
+}

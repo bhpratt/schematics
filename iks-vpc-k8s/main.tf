@@ -165,3 +165,23 @@ resource "kubernetes_secret" "ibmcloudCliSecret" {
 #       EOT
 #     }
 # }
+
+resource "kubernetes_secret" "imagePullSecret" {
+  metadata {
+    name = "cli-tool-pull-secret"
+  }
+
+  data = {
+    ".dockerconfigjson" = <<DOCKER
+{
+  "auths": {
+    "${var.registry_server}": {
+      "auth": "${base64encode("${var.registry_username}:${var.login_key}")}"
+    }
+  }
+}
+DOCKER
+  }
+
+  type = "kubernetes.io/dockerconfigjson"
+}
