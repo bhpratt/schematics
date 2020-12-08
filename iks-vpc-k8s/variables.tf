@@ -38,7 +38,7 @@ variable "staging_key" {}
 
 variable "ibmcloud_cli_key" {}
 
-variable "register_server" {
+variable "registry_server" {
   default = "us.icr.io"
 }
 
