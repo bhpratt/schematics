@@ -119,40 +119,6 @@ resource "kubernetes_namespace" "newNamespace" {
   }
 }
 
-# removing secrets - may not be needed
-# resource "kubernetes_secret" "loginSecret" {
-#   metadata {
-#     name = "login"
-#     namespace = var.namespace
-#   }
-
-#   data = {
-#     "login" = var.login_key
-#   }
-# }
-
-# resource "kubernetes_secret" "stagingSecret" {
-#   metadata {
-#     name = "staging"
-#     namespace = var.namespace
-#   }
-
-#   data = {
-#     "login-staging" = var.staging_key
-#   }
-# }
-
-# resource "kubernetes_secret" "ibmcloudCliSecret" {
-#   metadata {
-#     name = "ibm-cloud-cli"
-#     namespace = var.namespace
-#   }
-
-#   data = {
-#     "apikey" = var.ibmcloud_cli_key
-#   }
-# }
-
 # create imagepullsecret for cronjob
 resource "kubernetes_secret" "imagePullSecret" {
   metadata {
