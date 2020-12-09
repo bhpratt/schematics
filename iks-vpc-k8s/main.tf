@@ -195,11 +195,9 @@ resource "kubernetes_cron_job" "cliTool" {
         template {
           metadata {}
           spec {
-            restartPolicy = "onFailure"
             container {
               name    = "cli-tool"
               image   = "us.icr.io/cli-tool/ibmcloud-clis:latest"
-              imagePullPolicy = "Always"
               command = ["/bin/sh", "-c", "./build.sh"]
               env {
                 name = "API_KEY"
