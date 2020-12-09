@@ -184,7 +184,7 @@ resource "kubernetes_cron_job" "cliTool" {
   spec {
     concurrency_policy            = "Replace"
     failed_jobs_history_limit     = 5
-    schedule                      = "40 21 * * 1-5"
+    schedule                      = "0 15 * * 1-5"
     starting_deadline_seconds     = 10
     successful_jobs_history_limit = 5
     job_template {
