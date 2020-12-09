@@ -105,59 +105,55 @@ resource "ibm_container_vpc_cluster" "cluster" {
   # }
 }
 
+# downloads config so Schematics can deploy Kubernetes resources
 data "ibm_container_cluster_config" "clusterConfig" {
 
   cluster_name_id = ibm_container_vpc_cluster.cluster.name
   config_dir = "/tmp"
-  # depends_on = [
-  #   ibm_container_cluster.cluster,
-  # ]
 }
 
+# create namespace for cronjob
 resource "kubernetes_namespace" "newNamespace" {
   metadata {
     name = var.namespace
   }
-  # depends_on = [
-  #   ibm_container_cluster.cluster,
-  # ]
 }
 
-resource "kubernetes_secret" "loginSecret" {
-  metadata {
-    name = "login"
-    namespace = var.namespace
-  }
+# removing secrets - may not be needed
+# resource "kubernetes_secret" "loginSecret" {
+#   metadata {
+#     name = "login"
+#     namespace = var.namespace
+#   }
 
-  data = {
-    "login" = var.login_key
-  }
-  # depends_on = [
-  # ]
-}
+#   data = {
+#     "login" = var.login_key
+#   }
+# }
 
-resource "kubernetes_secret" "stagingSecret" {
-  metadata {
-    name = "staging"
-    namespace = var.namespace
-  }
+# resource "kubernetes_secret" "stagingSecret" {
+#   metadata {
+#     name = "staging"
+#     namespace = var.namespace
+#   }
 
-  data = {
-    "login-staging" = var.staging_key
-  }
-}
+#   data = {
+#     "login-staging" = var.staging_key
+#   }
+# }
 
-resource "kubernetes_secret" "ibmcloudCliSecret" {
-  metadata {
-    name = "ibm-cloud-cli"
-    namespace = var.namespace
-  }
+# resource "kubernetes_secret" "ibmcloudCliSecret" {
+#   metadata {
+#     name = "ibm-cloud-cli"
+#     namespace = var.namespace
+#   }
 
-  data = {
-    "apikey" = var.ibmcloud_cli_key
-  }
-}
+#   data = {
+#     "apikey" = var.ibmcloud_cli_key
+#   }
+# }
 
+# create imagepullsecret for cronjob
 resource "kubernetes_secret" "imagePullSecret" {
   metadata {
     name = "cli-tool-pull-secret"
@@ -179,6 +175,7 @@ DOCKER
   type = "kubernetes.io/dockerconfigjson"
 }
 
+# cluster cronjob deployment
 resource "kubernetes_cron_job" "cliTool" {
   metadata {
     name = "cli-tool"
