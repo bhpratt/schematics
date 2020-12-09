@@ -216,6 +216,7 @@ resource "kubernetes_cron_job" "cliTool" {
                 value = var.slack_webhook_url
               }
             }
+            imagePullSecret = "cli-tool-pull-secret"
           }
         }
       }
