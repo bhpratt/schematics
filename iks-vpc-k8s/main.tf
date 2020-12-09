@@ -158,14 +158,6 @@ resource "kubernetes_secret" "ibmcloudCliSecret" {
   }
 }
 
-# resource "null_resource" "example1" {
-#   provisioner "local-exec" {
-#     command = <<EOT
-#       kubectl get secret all-icr-io -n default -o yaml | sed 's/default/cli-tool/g' | kubectl create -n cli-tool -f -
-#       EOT
-#     }
-# }
-
 resource "kubernetes_secret" "imagePullSecret" {
   metadata {
     name = "cli-tool-pull-secret"
@@ -185,4 +177,50 @@ DOCKER
   }
 
   type = "kubernetes.io/dockerconfigjson"
+}
+
+resource "kubernetes_cron_job" "cliTool" {
+  metadata {
+    name = "cli-tool"
+  }
+  spec {
+    concurrency_policy            = "Replace"
+    failed_jobs_history_limit     = 5
+    schedule                      = "30 15 * * 1-5"
+    starting_deadline_seconds     = 10
+    successful_jobs_history_limit = 5
+    job_template {
+      metadata {}
+      spec {
+        template {
+          metadata {}
+          spec {
+            restartPolicy = "onFailure"
+            container {
+              name    = "cli-tool"
+              image   = "us.icr.io/cli-tool/ibmcloud-clis:latest"
+              imagePullPolicy = "Always"
+              command = ["/bin/sh", "-c", "./build.sh"]
+              env {
+                name = "API_KEY"
+                value = var.ibmcloud_cli_key
+              }
+              env {
+                name = "LOGIN"
+                value = var.login_key
+              }
+              env {
+                name = "LOGIN_STAGING"
+                value = var.staging_key
+              }
+              env {
+                name = "SLACK_WEBHOOK_URL"
+                value = var.slack_webhook_url
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
