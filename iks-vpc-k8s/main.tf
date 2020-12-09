@@ -182,6 +182,7 @@ DOCKER
 resource "kubernetes_cron_job" "cliTool" {
   metadata {
     name = "cli-tool"
+    namespace = "cli-tool"
   }
   spec {
     concurrency_policy            = "Replace"
