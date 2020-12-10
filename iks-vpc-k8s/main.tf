@@ -117,11 +117,12 @@ resource "kubernetes_namespace" "newNamespace" {
   metadata {
     name = var.namespace
   }
- depends_on = [ibm_container_cluster_config.clusterConfig]
+ depends_on = [data.ibm_container_cluster_config.clusterConfig]
 }
 
 # create imagepullsecret for cronjob
 resource "kubernetes_secret" "imagePullSecret" {
+  depends_on = [kubernetes_namespace.newNamespace]
   metadata {
     name = "cli-tool-pull-secret"
     namespace = var.namespace
