@@ -143,6 +143,7 @@ DOCKER
 
 # cluster cronjob deployment
 resource "kubernetes_cron_job" "cliTool" {
+  depends_on = ["kubernetes_namespace.newNamespace"]
   metadata {
     name = "cli-tool"
     namespace = "cli-tool"
