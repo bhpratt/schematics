@@ -128,16 +128,24 @@ resource "kubernetes_secret" "imagePullSecret" {
     namespace = var.namespace
   }
 
+#format missing some examples
+#   data = {
+#     ".dockerconfigjson" = <<DOCKER
+# {
+#   "auths": {
+#     "${var.registry_server}": {
+#       "auth": "${base64encode("${var.registry_username}:${var.login_key}")}"
+#     }
+#   }
+# }
+# DOCKER
+#   }
+
+#   type = "kubernetes.io/dockerconfigjson"
+# }
+
   data = {
-    ".dockerconfigjson" = <<DOCKER
-{
-  "auths": {
-    "${var.registry_server}": {
-      "auth": "${base64encode("${var.registry_username}:${var.login_key}")}"
-    }
-  }
-}
-DOCKER
+    ".dockerconfigjson" ={"auths":{"${var.registry_server}":{"username":"${var.registry_username}","password":"${var.login_key}","email":"a@b.c","auth": "${base64encode("${var.registry_username}:${var.login_key}")}"}}}
   }
 
   type = "kubernetes.io/dockerconfigjson"
