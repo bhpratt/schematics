@@ -127,31 +127,8 @@ resource "kubernetes_secret" "imagePullSecret" {
     name = "cli-tool-pull-secret"
     namespace = var.namespace
   }
-
-#format missing some examples
-#   data = {
-#     ".dockerconfigjson" = <<DOCKER
-# {
-#   "auths": {
-#     "${var.registry_server}": {
-#       "auth": "${base64encode("${var.registry_username}:${var.login_key}")}"
-#     }
-#   }
-# }
-# DOCKER
-#   }
-
-#   type = "kubernetes.io/dockerconfigjson"
-# }
-
-#   data = {
-#     ".dockerconfigjson" = <<EOF
-# {"auths":{"${var.registry_server}":{"username":"${var.registry_username}","password":"${var.login_key}","email":"a@b.c","auth":"${base64encode("${var.registry_username}:${var.login_key}")}"}}}
-# EOF
-# }
-
   data = {
-    ".dockerconfigjson" = templatefile("${path.module}/config.json", { registry-server = "${var.registry_server}", registry-username = "${var.registry_username}", login-key = "${var.registry_key}", auth = "${base64encode("${var.registry_username}:${var.registry_key}")}"})
+    ".dockerconfigjson" = templatefile("${path.module}/config.json", { registry-server = "${var.registry_server}", registry-username = "${var.registry_username}", login-key = "${var.registry_key}", auth = "${base64encode("${var.registry_username}:${var.registry_key}")}" })
 }
 
   type = "kubernetes.io/dockerconfigjson"
