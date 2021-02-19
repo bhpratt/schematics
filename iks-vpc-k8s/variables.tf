@@ -36,7 +36,8 @@ variable "login_key" {}
 
 variable "staging_key" {}
 
-variable "ibmcloud_cli_key" {}
+# may not be needed. testing removal
+# variable "ibmcloud_cli_key" {}
 
 variable "registry_key" {}
 
