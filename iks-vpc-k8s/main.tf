@@ -9,11 +9,11 @@ provider "ibm" {
 provider "kubernetes" {
   # config_path = data.ibm_container_cluster_config.clusterConfig.config_file_path
   load_config_file       = "false"
-  host                   = data.ibm_container_cluster_config.cluster_name_id.host
-  token                  = data.ibm_container_cluster_config.cluster_name_id.token
-  cluster_ca_certificate = data.ibm_container_cluster_config.cluster_name_id.ca_certificate
+  host                   = data.ibm_container_cluster_config.cluster.name.host
+  token                  = data.ibm_container_cluster_config.cluster.name.token
+  cluster_ca_certificate = data.ibm_container_cluster_config.cluster.name.ca_certificate
 }
-
+# review example: https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/container_cluster_config
 
 # name of VPC
 resource "ibm_is_vpc" "vpc1" {
