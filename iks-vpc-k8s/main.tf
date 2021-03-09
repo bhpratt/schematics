@@ -8,7 +8,7 @@ provider "ibm" {
 # review this doc: https://cloud.ibm.com/docs/terraform?topic=terraform-container-data-sources#container-cluster-config-sample
 provider "kubernetes" {
   # config_path = data.ibm_container_cluster_config.clusterConfig.config_file_path
-  load_config_file       = "false"
+  # load_config_file       = "false"
   host                   = data.ibm_container_cluster_config.clusterConfig.host
   token                  = data.ibm_container_cluster_config.clusterConfig.token
   cluster_ca_certificate = data.ibm_container_cluster_config.clusterConfig.ca_certificate
