@@ -159,7 +159,7 @@ resource "kubernetes_cron_job" "cliTool" {
           spec {
             container {
               name    = "cli-tool"
-              image   = "us.icr.io/cli-tool/ibmcloud-clis:latest"
+              image   = "us.icr.io/cli-tool/launchbox:latest"
               command = ["/bin/sh", "-c", "./build.sh"]
               env {
                 #key used by build.sh to log in, build image. changed from ibmcloud_cli_key
