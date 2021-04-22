@@ -87,6 +87,8 @@ resource "ibm_container_vpc_cluster" "cluster" {
   worker_count      = var.worker_count
   resource_group_id = data.ibm_resource_group.resource_group.id
   cos_instance_crn  = ibm_resource_instance.cos_instance.id
+  wait_till         = "OneWorkerNodeReady"
+
 
   zones {
     subnet_id = ibm_is_subnet.subnet1.id
