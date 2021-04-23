@@ -17,25 +17,25 @@ data "ibm_resource_group" "resource_group" {
   name = var.resource_group
 }
 
-# required inbound connectivity for VPC LB traffic to worker nodes
+# required inbound connectivity for VPC LB traffic to worker nodes on K8s 1.18 or earlier
 # https://cloud.ibm.com/docs/containers?topic=containers-clusters#clusters_vpcg2
-resource "ibm_is_security_group_rule" "security_group_rule_default_tcp" {
-    group = ibm_is_vpc.vpc1.default_security_group
-    direction = "inbound"
-    tcp {
-      port_min = 30000
-      port_max = 32767
-    }
- }
+# resource "ibm_is_security_group_rule" "security_group_rule_default_tcp" {
+#     group = ibm_is_vpc.vpc1.default_security_group
+#     direction = "inbound"
+#     tcp {
+#       port_min = 30000
+#       port_max = 32767
+#     }
+#  }
 
- resource "ibm_is_security_group_rule" "security_group_rule_default_udp" {
-    group = ibm_is_vpc.vpc1.default_security_group
-    direction = "inbound"
-    udp {
-      port_min = 30000
-      port_max = 32767
-    }
- }
+#  resource "ibm_is_security_group_rule" "security_group_rule_default_udp" {
+#     group = ibm_is_vpc.vpc1.default_security_group
+#     direction = "inbound"
+#     udp {
+#       port_min = 30000
+#       port_max = 32767
+#     }
+#  }
 
  # Include public gateway for connectivity outside of VPC
  resource "ibm_is_public_gateway" "gateway_subnet1" {
@@ -48,6 +48,29 @@ resource "ibm_is_security_group_rule" "security_group_rule_default_tcp" {
         create = "90m"
     }
 }
+
+# Uncomment to create multizone
+#  resource "ibm_is_public_gateway" "gateway_subnet2" {
+#     name       = "vpcgen2-iks-gateway"
+#     vpc        = ibm_is_vpc.vpc1.id
+#     zone       = "${var.region}-2"
+
+#     //User can configure timeouts
+#     timeouts {
+#         create = "90m"
+#     }
+# }
+
+#  resource "ibm_is_public_gateway" "gateway_subnet3" {
+#     name       = "vpcgen2-iks-gateway"
+#     vpc        = ibm_is_vpc.vpc1.id
+#     zone       = "${var.region}-3"
+
+#     //User can configure timeouts
+#     timeouts {
+#         create = "90m"
+#     }
+# }
 
 # VPC subnets. Uses default CIDR range
 resource "ibm_is_subnet" "subnet1" {
