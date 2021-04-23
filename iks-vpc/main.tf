@@ -51,7 +51,7 @@ data "ibm_resource_group" "resource_group" {
 
 # Uncomment to create multizone
 #  resource "ibm_is_public_gateway" "gateway_subnet2" {
-#     name       = "vpcgen2-iks-gateway"
+#     name       = "vpcgen2-iks-gateway-2"
 #     vpc        = ibm_is_vpc.vpc1.id
 #     zone       = "${var.region}-2"
 
@@ -62,7 +62,7 @@ data "ibm_resource_group" "resource_group" {
 # }
 
 #  resource "ibm_is_public_gateway" "gateway_subnet3" {
-#     name       = "vpcgen2-iks-gateway"
+#     name       = "vpcgen2-iks-gateway-3"
 #     vpc        = ibm_is_vpc.vpc1.id
 #     zone       = "${var.region}-3"
 
