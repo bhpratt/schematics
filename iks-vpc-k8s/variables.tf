@@ -36,9 +36,6 @@ variable "login_key" {}
 
 variable "staging_key" {}
 
-# may not be needed. testing removal
-# variable "ibmcloud_cli_key" {}
-
 variable "registry_key" {}
 
 variable "slack_webhook_url" {}
