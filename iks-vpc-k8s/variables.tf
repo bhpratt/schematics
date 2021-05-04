@@ -26,6 +26,10 @@ variable "classic_access" {
   default = "false"
 }
 
+variable "delete_storage" {
+  default = true
+}
+
 variable "ibmcloud_api_key" {}
 
 variable "namespace" {

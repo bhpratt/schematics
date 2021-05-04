@@ -84,13 +84,14 @@ resource "ibm_is_subnet" "subnet3" {
 
 # IKS cluster. Single zone.
 resource "ibm_container_vpc_cluster" "cluster" {
-  name              = var.name
-  vpc_id            = ibm_is_vpc.vpc1.id
-  flavor            = var.flavor
-  worker_count      = var.worker_count
-  resource_group_id = data.ibm_resource_group.resource_group.id
+  name                 = var.name
+  vpc_id               = ibm_is_vpc.vpc1.id
+  flavor               = var.flavor
+  worker_count         = var.worker_count
+  resource_group_id    = data.ibm_resource_group.resource_group.id
+  force_delete_storage = var.delete_storage
   # Lets Schematics/Terraform start working with the cluster as soon as a node is available
-  wait_till         = "OneWorkerNodeReady"
+  wait_till            = "OneWorkerNodeReady"
 
   zones {
     subnet_id = ibm_is_subnet.subnet1.id
