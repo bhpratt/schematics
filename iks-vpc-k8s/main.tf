@@ -1,3 +1,12 @@
+terraform {
+     required_providers {
+        ibm = {
+           source = "IBM-Cloud/ibm"
+           }
+      }
+   }
+
+
 # specifies gen2 and region for VPC/IKS resources
 provider "ibm" {
   generation = 2
