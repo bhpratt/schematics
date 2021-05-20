@@ -9,7 +9,6 @@ terraform {
 
 # specifies gen2 and region for VPC/IKS resources
 provider "ibm" {
-  generation = 2
   region = var.region
   ibmcloud_api_key = var.ibmcloud_api_key
 }
