@@ -7,3 +7,5 @@
 
 # Variable overrides
 *.tfvars
+
+notes.txt
