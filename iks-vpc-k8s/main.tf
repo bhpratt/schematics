@@ -4,7 +4,8 @@ terraform {
            source = "IBM-Cloud/ibm"
            }
       }
-   }
+  required_version = ">= 0.12"
+}
 
 
 # specifies gen2 and region for VPC/IKS resources
