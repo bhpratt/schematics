@@ -1,8 +1,9 @@
 # Terraform files from local builds
-*.hcl
 .terraform
+*.hcl
 *.tfstate
 *.info
+*.backup
 
 # Variable overrides
 *.tfvars
