@@ -14,6 +14,16 @@ provider "ibm" {
   ibmcloud_api_key = var.ibmcloud_api_key
 }
 
+# review this doc: https://cloud.ibm.com/docs/terraform?topic=terraform-container-data-sources#container-cluster-config-sample
+ provider "kubernetes" {
+   # config_path = data.ibm_container_cluster_config.clusterConfig.config_file_path
+   # load_config_file       = "false"
+   host                   = data.ibm_container_cluster_config.clusterConfig.host
+   token                  = data.ibm_container_cluster_config.clusterConfig.token
+   cluster_ca_certificate = data.ibm_container_cluster_config.clusterConfig.ca_certificate
+ }
+ # review example: https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/container_cluster_config
+
 # downloads config so Schematics can deploy Kubernetes resources
 data "ibm_container_cluster_config" "clusterConfig" {
 
