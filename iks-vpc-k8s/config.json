@@ -1,1 +1,0 @@
-{"auths":{"${registry-server}":{"username":"${registry-username}","password":"${login-key}","email":"a@b.c","auth":"${auth}"}}}
