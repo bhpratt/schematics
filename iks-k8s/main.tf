@@ -47,7 +47,7 @@ resource "kubernetes_secret" "imagePullSecret" {
     namespace = var.namespace
   }
   data = {
-    ".dockerconfigjson" = templatefile("${path.module}/config.json", { registry-server = "var.registry_server", registry-username = "var.registry_username", login-key = "var.registry_key", auth = "${base64encode("var.registry_username:var.registry_key")}" })
+    ".dockerconfigjson" = templatefile("${path.module}/config.json", { registry-server = "${var.registry_server}", registry-username = "${var.registry_username}", login-key = "${var.registry_key}", auth = "${base64encode("${var.registry_username}:${var.registry_key}")}" })
 }
 
   type = "kubernetes.io/dockerconfigjson"
