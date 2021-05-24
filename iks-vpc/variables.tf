@@ -38,3 +38,5 @@ variable "delete_storage" {
   description = "Choose whether you want storage created by the cluster to be deleted at the same time as the cluster"
   default = true
 }
+
+variable "ibmcloud_api_key" {}
