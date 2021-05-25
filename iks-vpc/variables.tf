@@ -28,6 +28,10 @@ variable "vpc_name" {
   default = "iks-vpc-k8s"
 }
 
+variable "kube_version" {
+  type = string
+}
+
 variable "classic_access" {
   type = string
   default = "false"
