@@ -14,6 +14,13 @@ provider "ibm" {
   ibmcloud_api_key = var.ibmcloud_api_key
 }
 
+# downloads config so Schematics can deploy Kubernetes resources
+data "ibm_container_cluster_config" "clusterConfig" {
+
+  cluster_name_id = "iks-vpc-k8s"
+  # config_dir = "/tmp"
+}
+
 # review this doc: https://cloud.ibm.com/docs/terraform?topic=terraform-container-data-sources#container-cluster-config-sample
  provider "kubernetes" {
    # config_path = data.ibm_container_cluster_config.clusterConfig.config_file_path
@@ -24,12 +31,6 @@ provider "ibm" {
  }
  # review example: https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/container_cluster_config
 
-# downloads config so Schematics can deploy Kubernetes resources
-data "ibm_container_cluster_config" "clusterConfig" {
-
-  cluster_name_id = "iks-vpc-k8s"
-  # config_dir = "/tmp"
-}
 
 # create namespace for cronjob
 resource "kubernetes_namespace" "newNamespace" {
