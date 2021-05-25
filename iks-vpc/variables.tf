@@ -38,6 +38,11 @@ variable "patch_version" {
   default = null
 }
 
+variable "update_all_workers" {
+  type = bool
+  default = false
+}
+
 variable "classic_access" {
   type = string
   default = "false"
