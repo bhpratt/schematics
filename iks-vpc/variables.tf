@@ -33,6 +33,11 @@ variable "kube_version" {
   default = null
 }
 
+variable "patch_version" {
+  type = string
+  default = null
+}
+
 variable "classic_access" {
   type = string
   default = "false"
