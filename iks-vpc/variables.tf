@@ -30,6 +30,7 @@ variable "vpc_name" {
 
 variable "kube_version" {
   type = string
+  default = null
 }
 
 variable "classic_access" {
