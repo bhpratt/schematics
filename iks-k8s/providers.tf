@@ -30,6 +30,7 @@ provider "ibm" {
 # review these examples: https://cloud.ibm.com/docs/terraform?topic=terraform-container-data-sources#container-cluster-config-sample
 # https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/container_cluster_config
 ##############################################################################
+ 
  provider "kubernetes" {
    # alternate config style
    # config_path = data.ibm_container_cluster_config.clusterConfig.config_file_path
