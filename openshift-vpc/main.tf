@@ -1,9 +1,3 @@
-# specifies gen2 and region for VPC/IKS resources
-provider "ibm" {
-  generation = 2
-  region = var.region
-}
-
 # COS instance for registry backup
 resource "ibm_resource_instance" "cos_instance" {
   name     = var.service_instance_name
