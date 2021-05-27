@@ -27,8 +27,8 @@ variable "resource_group" {
   default = "default"
 }
 
-variable "public_service_endpoint_enabled" {
-  default = true
+variable "public_service_endpoint_disabled" {
+  default = false
 }
 
 variable "name" {
