@@ -79,9 +79,9 @@ resource "ibm_container_vpc_cluster" "cluster" {
   flavor            = var.flavor
   kube_version      = var.kube_version
   worker_count      = var.worker_count
+  public_service_endpoint = var.public_service_endpoint_enabled
   resource_group_id = data.ibm_resource_group.resource_group.id
   cos_instance_crn  = ibm_resource_instance.cos_instance.id
-  public_service_endpoint = var.public_service_endpoint_enabled
   wait_till         = "OneWorkerNodeReady"
 
 
