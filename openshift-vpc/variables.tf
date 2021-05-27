@@ -27,6 +27,10 @@ variable "resource_group" {
   default = "default"
 }
 
+variable "public_service_endpoint_enabled" {
+  default = true
+}
+
 variable "name" {
   default = "vpc-gen2-roks"
 }
