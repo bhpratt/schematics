@@ -1,36 +1,9 @@
-terraform {
-     required_providers {
-        ibm = {
-           source = "IBM-Cloud/ibm"
-           }
-      }
-  required_version = ">= 0.12"
-}
-
-
-# specifies gen2 and region for VPC/IKS resources
-provider "ibm" {
-  region = var.region
-  ibmcloud_api_key = var.ibmcloud_api_key
-}
-
 # downloads config so Schematics can deploy Kubernetes resources
 data "ibm_container_cluster_config" "clusterConfig" {
 
   cluster_name_id = "iks-vpc-k8s"
   # config_dir = "/tmp"
 }
-
-# review this doc: https://cloud.ibm.com/docs/terraform?topic=terraform-container-data-sources#container-cluster-config-sample
- provider "kubernetes" {
-   # config_path = data.ibm_container_cluster_config.clusterConfig.config_file_path
-   # load_config_file       = "false"
-   host                   = data.ibm_container_cluster_config.clusterConfig.host
-   token                  = data.ibm_container_cluster_config.clusterConfig.token
-   cluster_ca_certificate = data.ibm_container_cluster_config.clusterConfig.ca_certificate
- }
- # review example: https://registry.terraform.io/providers/IBM-Cloud/ibm/latest/docs/data-sources/container_cluster_config
-
 
 # create namespace for cronjob
 resource "kubernetes_namespace" "newNamespace" {
