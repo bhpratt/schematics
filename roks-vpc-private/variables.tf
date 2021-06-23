@@ -56,12 +56,6 @@ variable "delete_storage" {
 
 variable "ibmcloud_api_key" {}
 
-variable "public_service_endpoint" {
-  type = bool
-  default = false
-}
-
-variable "private_service_endpoint" {
-  type = bool
+variable "public_service_endpoint_disabled" {
   default = true
 }
