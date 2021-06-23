@@ -1,3 +1,16 @@
+# COS variables
+variable "service_instance_name" {
+  default = "roks-gen2"
+}
+
+variable "service_offering" {
+  default = "cloud-object-storage"
+}
+
+variable "plan" {
+  default = "standard"
+}
+
 
 variable "flavor" {
   type = string
