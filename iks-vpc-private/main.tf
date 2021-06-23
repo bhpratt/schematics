@@ -56,6 +56,8 @@ resource "ibm_container_vpc_cluster" "cluster" {
   worker_count         = var.worker_count
   resource_group_id    = data.ibm_resource_group.resource_group.id
   force_delete_storage = var.delete_storage
+  public_service_endpoint = var.public_service_endpoint
+  private_service_endpoint = var.private_service_endpoint
   # Lets Schematics/Terraform start working with the cluster as soon as a node is available
   wait_till            = "OneWorkerNodeReady"
 
