@@ -28,7 +28,7 @@ resource "ibm_is_subnet" "subnet1" {
   vpc                      = ibm_is_vpc.vpc1.id
   zone                     = "${var.region}-1"
   total_ipv4_address_count = 256
-  public_gateway           = ibm_is_public_gateway.gateway_subnet1.id
+  # public_gateway           = ibm_is_public_gateway.gateway_subnet1.id
 }
 
 resource "ibm_is_subnet" "subnet2" {
