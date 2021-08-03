@@ -33,12 +33,12 @@ variable "resource_group" {
 
 variable "name" {
   type = string
-  default = "iks-vpc-private"
+  default = "roks-vpc-private"
 }
 
 variable "vpc_name" {
   type = string
-  default = "iks-vpc-private"
+  default = "roks-vpc-private"
 }
 
 variable "kube_version" {

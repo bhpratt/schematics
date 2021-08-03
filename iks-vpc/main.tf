@@ -11,16 +11,16 @@ data "ibm_resource_group" "resource_group" {
 }
 
  # Include public gateway for connectivity outside of VPC
- resource "ibm_is_public_gateway" "gateway_subnet1" {
-    name       = "vpcgen2-iks-gateway"
-    vpc        = ibm_is_vpc.vpc1.id
-    zone       = "${var.region}-1"
+#  resource "ibm_is_public_gateway" "gateway_subnet1" {
+#     name       = "vpcgen2-iks-gateway"
+#     vpc        = ibm_is_vpc.vpc1.id
+#     zone       = "${var.region}-1"
 
-    //User can configure timeouts
-    timeouts {
-        create = "90m"
-    }
-}
+#     //User can configure timeouts
+#     timeouts {
+#         create = "90m"
+#     }
+# }
 
 # VPC subnets. Uses default CIDR range
 resource "ibm_is_subnet" "subnet1" {
