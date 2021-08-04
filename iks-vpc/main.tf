@@ -10,7 +10,8 @@ data "ibm_resource_group" "resource_group" {
   name = var.resource_group
 }
 
- # Include public gateway for connectivity outside of VPC
+# Include public gateway for connectivity outside of VPC
+# To remove public gateway, cancel out this block and line in subnet1
 #  resource "ibm_is_public_gateway" "gateway_subnet1" {
 #     name       = "vpcgen2-iks-gateway"
 #     vpc        = ibm_is_vpc.vpc1.id
@@ -31,19 +32,20 @@ resource "ibm_is_subnet" "subnet1" {
   # public_gateway           = ibm_is_public_gateway.gateway_subnet1.id
 }
 
-resource "ibm_is_subnet" "subnet2" {
-  name                     = "${var.region}-2"
-  vpc                      = ibm_is_vpc.vpc1.id
-  zone                     = "${var.region}-2"
-  total_ipv4_address_count = 256
-}
+# Uncomment to add additional subnets
+# resource "ibm_is_subnet" "subnet2" {
+#   name                     = "${var.region}-2"
+#   vpc                      = ibm_is_vpc.vpc1.id
+#   zone                     = "${var.region}-2"
+#   total_ipv4_address_count = 256
+# }
 
-resource "ibm_is_subnet" "subnet3" {
-  name                     = "${var.region}-3"
-  vpc                      = ibm_is_vpc.vpc1.id
-  zone                     = "${var.region}-3"
-  total_ipv4_address_count = 256
-}
+# resource "ibm_is_subnet" "subnet3" {
+#   name                     = "${var.region}-3"
+#   vpc                      = ibm_is_vpc.vpc1.id
+#   zone                     = "${var.region}-3"
+#   total_ipv4_address_count = 256
+# }
 
 # IKS cluster. Single zone.
 resource "ibm_container_vpc_cluster" "cluster" {
