@@ -17,7 +17,7 @@ resource "ibm_is_public_gateway" "gateway_subnet1" {
   vpc        = ibm_is_vpc.vpc1.id
   zone       = "${var.region}-1"
 
-     //User can configure timeouts
+  //User can configure timeouts
   timeouts {
      create = "90m"
   }
