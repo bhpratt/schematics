@@ -77,3 +77,8 @@ resource "ibm_container_vpc_cluster" "cluster" {
   #   name      = "${var.region}-3"
   # }
 }
+
+resource "ibm_container_alb" "alb" {
+  alb_id = "private-crc4vf0gbw0f6nk6sh2jr0-alb1"
+  enable = true
+}
