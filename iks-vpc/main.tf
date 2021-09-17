@@ -78,7 +78,7 @@ resource "ibm_container_vpc_cluster" "cluster" {
   # }
 }
 
-resource "ibm_container_alb" "alb" {
-  alb_id = "private-crc4vf0gbw0f6nk6sh2jr0-alb1"
-  enable = true
-}
+# resource "ibm_container_vpc_alb" "alb" {
+#   alb_id = "private-crc52adbkw0daub499nmgg-alb1"
+#   enable = true
+# }
