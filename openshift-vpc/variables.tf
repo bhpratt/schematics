@@ -35,7 +35,10 @@ variable "name" {
   default = "vpc-gen2-roks"
 }
 
-variable "kube_version" {}
+variable "kube_version" {
+  type = string
+  default = null
+}
 
 variable "vpc_name" {
   default = "vpz-openshift"
