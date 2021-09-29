@@ -16,6 +16,10 @@ data "ibm_resource_group" "resource_group" {
   name = var.resource_group
 }
 
+# get the list of available cluster versions in IBM Cloud
+data "ibm_container_cluster_versions" "cluster_versions" {
+}
+
 # required inbound connectivity for VPC LB traffic to worker nodes for openshift 4.4 clusters and earlier
 # https://cloud.ibm.com/docs/openshift?topic=openshift-clusters#clusters_vpcg2
 # resource "ibm_is_security_group_rule" "security_group_rule_default_tcp" {
@@ -58,26 +62,27 @@ resource "ibm_is_subnet" "subnet1" {
 
 }
 
-resource "ibm_is_subnet" "subnet2" {
-  name                     = "${var.region}-2"
-  vpc                      = ibm_is_vpc.vpc1.id
-  zone                     = "${var.region}-2"
-  total_ipv4_address_count = 256
-}
+# uncomment to create multizone cluster
+# resource "ibm_is_subnet" "subnet2" {
+#   name                     = "${var.region}-2"
+#   vpc                      = ibm_is_vpc.vpc1.id
+#   zone                     = "${var.region}-2"
+#   total_ipv4_address_count = 256
+# }
 
-resource "ibm_is_subnet" "subnet3" {
-  name                     = "${var.region}-3"
-  vpc                      = ibm_is_vpc.vpc1.id
-  zone                     = "${var.region}-3"
-  total_ipv4_address_count = 256
-}
+# resource "ibm_is_subnet" "subnet3" {
+#   name                     = "${var.region}-3"
+#   vpc                      = ibm_is_vpc.vpc1.id
+#   zone                     = "${var.region}-3"
+#   total_ipv4_address_count = 256
+# }
 
 # ROKS cluster. Single zone.
 resource "ibm_container_vpc_cluster" "cluster" {
   name              = var.name
   vpc_id            = ibm_is_vpc.vpc1.id
   flavor            = var.flavor
-  kube_version      = var.kube_version
+  kube_version      = (var.kube_version != null ? var.kube_version : data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions[2])
   worker_count      = var.worker_count
   disable_public_service_endpoint = var.public_service_endpoint_disabled
   resource_group_id = data.ibm_resource_group.resource_group.id

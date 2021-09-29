@@ -3,6 +3,14 @@ resource "ibm_is_vpc" "vpc1" {
   name = var.vpc_name
   # Only one VPC per region can have classic access
   classic_access = var.classic_access
+  resource_group = local.rg_id
+}
+
+# remove this after testing
+locals {
+  enable_private_alb = true
+  enable_public_alb = true
+  rg_id = data.ibm_resource_group.resource_group.id
 }
 
 # name of resource group
@@ -16,6 +24,7 @@ resource "ibm_is_public_gateway" "gateway_subnet1" {
   name       = "vpcgen2-iks-gateway"
   vpc        = ibm_is_vpc.vpc1.id
   zone       = "${var.region}-1"
+  resource_group = local.rg_id
 
   //User can configure timeouts
   timeouts {
@@ -30,6 +39,7 @@ resource "ibm_is_subnet" "subnet1" {
   zone                     = "${var.region}-1"
   total_ipv4_address_count = 256
   public_gateway           = ibm_is_public_gateway.gateway_subnet1.id
+  resource_group = local.rg_id
 }
 
 # Uncomment to add additional subnets
@@ -38,6 +48,7 @@ resource "ibm_is_subnet" "subnet1" {
 #   vpc                      = ibm_is_vpc.vpc1.id
 #   zone                     = "${var.region}-2"
 #   total_ipv4_address_count = 256
+#   resource_group = local.rg_id
 # }
 
 # resource "ibm_is_subnet" "subnet3" {
@@ -45,8 +56,9 @@ resource "ibm_is_subnet" "subnet1" {
 #   vpc                      = ibm_is_vpc.vpc1.id
 #   zone                     = "${var.region}-3"
 #   total_ipv4_address_count = 256
+#   resource_group = local.rg_id
 # }
-
+ 
 # IKS cluster. Single zone.
 resource "ibm_container_vpc_cluster" "cluster" {
   name                 = var.name
@@ -78,7 +90,9 @@ resource "ibm_container_vpc_cluster" "cluster" {
   # }
 }
 
+# uncomment to enable or disable ALBs
 # resource "ibm_container_vpc_alb" "alb" {
-#   alb_id = "private-crc52adbkw0daub499nmgg-alb1"
-#   enable = true
+#   for_each = { for i, v in ibm_container_vpc_cluster.cluster.albs: i => v}
+#   alb_id = each.value.id
+#   enable = (each.value.alb_type == "private" && local.enable_private_alb) || (each.value.alb_type == "public" && local.enable_public_alb) ? true : false
 # }
