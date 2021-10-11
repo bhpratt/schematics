@@ -79,11 +79,12 @@ resource "ibm_is_subnet" "subnet1" {
 
 # ROKS cluster. Single zone.
 resource "ibm_container_vpc_cluster" "cluster" {
-  count = length(data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions) - 2
+  //*TO DO*: figure out how to make this container_index work ? maybe locals? https://www.terraform.io/docs/language/values/locals.html#declaring-a-local-value
+  #container_index = length(data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions) - 2
   name              = var.name
   vpc_id            = ibm_is_vpc.vpc1.id
   flavor            = var.flavor
-  kube_version      = (var.kube_version != null ? var.kube_version : data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions[count])
+  kube_version      = (var.kube_version != null ? var.kube_version : data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions[2])
   worker_count      = var.worker_count
   disable_public_service_endpoint = var.public_service_endpoint_disabled
   resource_group_id = data.ibm_resource_group.resource_group.id
