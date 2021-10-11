@@ -84,6 +84,7 @@ resource "ibm_container_vpc_cluster" "cluster" {
   name              = var.name
   vpc_id            = ibm_is_vpc.vpc1.id
   flavor            = var.flavor
+  #*TO DO* need to tag version with _openshift at the end
   kube_version      = (var.kube_version != null ? var.kube_version : data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions[2])
   worker_count      = var.worker_count
   disable_public_service_endpoint = var.public_service_endpoint_disabled
