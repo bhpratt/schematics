@@ -70,6 +70,7 @@ resource "ibm_is_subnet" "subnet1" {
 #   vpc                      = ibm_is_vpc.vpc1.id
 #   zone                     = "${var.region}-2"
 #   total_ipv4_address_count = 256
+#   public_gateway           = ibm_is_public_gateway.gateway_subnet2.id
 # }
 
 # resource "ibm_is_subnet" "subnet3" {
@@ -77,6 +78,7 @@ resource "ibm_is_subnet" "subnet1" {
 #   vpc                      = ibm_is_vpc.vpc1.id
 #   zone                     = "${var.region}-3"
 #   total_ipv4_address_count = 256
+#   public_gateway           = ibm_is_public_gateway.gateway_subnet3.id
 # }
 
 # ROKS cluster. Single zone. Kube version by default will take the 3rd in the list of the valid openshift versions given in the output of `ibmcloud oc versions`
