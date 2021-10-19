@@ -33,7 +33,7 @@ data "ibm_container_cluster_versions" "cluster_versions" {
 
 # uncomment to create multizone cluster w/3 public gateways
 #  resource "ibm_is_public_gateway" "gateway_subnet2" {
-#     name       = "vpc-gen2-roks-gateway"
+#     name       = "vpc-gen2-roks-gateway-2"
 #     vpc        = ibm_is_vpc.vpc1.id
 #     zone       = "${var.region}-2"
 
@@ -44,7 +44,7 @@ data "ibm_container_cluster_versions" "cluster_versions" {
 # }
 
 #  resource "ibm_is_public_gateway" "gateway_subnet3" {
-#     name       = "vpc-gen2-roks-gateway"
+#     name       = "vpc-gen2-roks-gateway-3"
 #     vpc        = ibm_is_vpc.vpc1.id
 #     zone       = "${var.region}-3"
 
