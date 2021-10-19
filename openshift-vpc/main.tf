@@ -81,16 +81,16 @@ resource "ibm_is_subnet" "subnet1" {
 resource "ibm_container_vpc_cluster" "cluster" {
   //*TO DO*: figure out how to make this container_index work ? maybe locals? https://www.terraform.io/docs/language/values/locals.html#declaring-a-local-value
   #container_index = length(data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions) - 2
-  name              = var.name
-  vpc_id            = ibm_is_vpc.vpc1.id
-  flavor            = var.flavor
+  name                            = var.name
+  vpc_id                          = ibm_is_vpc.vpc1.id
+  flavor                          = var.flavor
   #*TO DO* need to tag version with _openshift at the end: https://stackoverflow.com/questions/63443283/how-to-concatenate-a-variable-and-a-string-in-terraform
-  kube_version      = (var.kube_version != null ? var.kube_version : "${data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions[2]}_openshift")
-  worker_count      = var.worker_count
+  kube_version                    = (var.kube_version != null ? var.kube_version : "${data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions[2]}_openshift")
+  worker_count                    = var.worker_count
   disable_public_service_endpoint = var.public_service_endpoint_disabled
-  resource_group_id = data.ibm_resource_group.resource_group.id
-  cos_instance_crn  = ibm_resource_instance.cos_instance.id
-  wait_till         = "OneWorkerNodeReady"
+  resource_group_id               = data.ibm_resource_group.resource_group.id
+  cos_instance_crn                = ibm_resource_instance.cos_instance.id
+  wait_till                       = "OneWorkerNodeReady"
 
 
   zones {
