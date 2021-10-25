@@ -18,20 +18,6 @@ data "ibm_resource_group" "resource_group" {
   name = var.resource_group
 }
 
-# Include public gateway for connectivity outside of VPC
-# To remove public gateway, cancel out this block and line in subnet1
-resource "ibm_is_public_gateway" "gateway_subnet1" {
-  name       = "vpcgen2-iks-gateway"
-  vpc        = ibm_is_vpc.vpc1.id
-  zone       = "${var.region}-1"
-  resource_group = local.rg_id
-
-  //User can configure timeouts
-  timeouts {
-     create = "90m"
-  }
- }
-
 # VPC subnets. Uses default CIDR range
 resource "ibm_is_subnet" "subnet1" {
   name                     = "${var.region}-1"
@@ -58,6 +44,20 @@ resource "ibm_is_subnet" "subnet1" {
 #   total_ipv4_address_count = 256
 #   resource_group = local.rg_id
 # }
+
+# Include public gateway for connectivity outside of VPC
+# To remove public gateway, cancel out this block and line in subnet1
+resource "ibm_is_public_gateway" "gateway_subnet1" {
+  name       = "vpcgen2-iks-gateway"
+  vpc        = ibm_is_vpc.vpc1.id
+  zone       = "${var.region}-1"
+  resource_group = local.rg_id
+
+  //User can configure timeouts
+  timeouts {
+     create = "90m"
+  }
+ }
  
 # IKS cluster. Single zone.
 resource "ibm_container_vpc_cluster" "cluster" {
