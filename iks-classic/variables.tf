@@ -15,17 +15,29 @@ variable "name" {
   default = "iks-cluster"
 }
 
-variable "public_vlan_id" {}
+variable "public_vlan_id" {
+  default = null
+}
 
-variable "private_vlan_id" {}
+variable "private_vlan_id" {
+  default = null
+}
 
-variable "public_vlan_id_zone2" {}
+variable "public_vlan_id_zone2" {
+  default = null
+}
 
-variable "private_vlan_id_zone2" {}
+variable "private_vlan_id_zone2" {
+  default = null
+}
 
-variable "public_vlan_id_zone3" {}
+variable "public_vlan_id_zone3" {
+  default = null
+}
 
-variable "private_vlan_id_zone3" {}
+variable "private_vlan_id_zone3" {
+  default = null
+}
 
 variable "datacenter" {
   default = "wdc07"
