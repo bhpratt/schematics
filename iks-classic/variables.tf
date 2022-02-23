@@ -48,5 +48,5 @@ variable "public_service_endpoint_enabled" {
 }
 
 variable private_service_endpoint_enabled {
-  default = false
+  default = true
 }
