@@ -1,10 +1,10 @@
 # COS instance for registry backup
-# resource "ibm_resource_instance" "cos_instance" {
-#   name     = var.service_instance_name
-#   service  = var.service_offering
-#   plan     = var.plan
-#   location = "global"
-# }
+resource "ibm_resource_instance" "cos_instance" {
+  name     = var.service_instance_name
+  service  = var.service_offering
+  plan     = var.plan
+  location = "us-south"
+}
 
 # name of VPC
 resource "ibm_is_vpc" "vpc1" {
@@ -90,8 +90,7 @@ resource "ibm_container_vpc_cluster" "cluster" {
   worker_count                    = var.worker_count
   disable_public_service_endpoint = var.public_service_endpoint_disabled
   resource_group_id               = data.ibm_resource_group.resource_group.id
-  cos_instance_crn                = "crn:v1:bluemix:public:cloud-object-storage:global:a/9e797f8a8592fed20ae7a775a1cd7e12:01be86eb-f186-4ae4-b0ed-6a0b0deec149:bucket:regional-bucket-east-new"
-  # cos_instance_crn                = ibm_resource_instance.cos_instance.id
+  cos_instance_crn                = ibm_resource_instance.cos_instance.id
   wait_till                       = "OneWorkerNodeReady"
 
 
