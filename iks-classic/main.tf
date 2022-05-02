@@ -31,20 +31,20 @@ resource "ibm_container_cluster" "cluster" {
   public_service_endpoint  = var.public_service_endpoint_enabled
 }
 
-resource "ibm_container_worker_pool_zone_attachment" "zone2" {
-  cluster           = ibm_container_cluster.cluster.id
-  worker_pool       = ibm_container_cluster.cluster.worker_pools.0.id
-  zone              = var.datacenter_zone2
-  private_vlan_id   = var.private_vlan_id_zone2
-  public_vlan_id    = var.public_vlan_id_zone2
-  resource_group_id = data.ibm_resource_group.resource_group.id
-}
+# resource "ibm_container_worker_pool_zone_attachment" "zone2" {
+#   cluster           = ibm_container_cluster.cluster.id
+#   worker_pool       = ibm_container_cluster.cluster.worker_pools.0.id
+#   zone              = var.datacenter_zone2
+#   private_vlan_id   = var.private_vlan_id_zone2
+#   public_vlan_id    = var.public_vlan_id_zone2
+#   resource_group_id = data.ibm_resource_group.resource_group.id
+# }
 
-resource "ibm_container_worker_pool_zone_attachment" "zone3" {
-  cluster           = ibm_container_cluster.cluster.id
-  worker_pool       = ibm_container_cluster.cluster.worker_pools.0.id
-  zone              = var.datacenter_zone3
-  private_vlan_id   = var.private_vlan_id_zone3
-  public_vlan_id    = var.private_vlan_id_zone3
-  resource_group_id = data.ibm_resource_group.resource_group.id
-}
+# resource "ibm_container_worker_pool_zone_attachment" "zone3" {
+#   cluster           = ibm_container_cluster.cluster.id
+#   worker_pool       = ibm_container_cluster.cluster.worker_pools.0.id
+#   zone              = var.datacenter_zone3
+#   private_vlan_id   = var.private_vlan_id_zone3
+#   public_vlan_id    = var.private_vlan_id_zone3
+#   resource_group_id = data.ibm_resource_group.resource_group.id
+# }
