@@ -8,5 +8,4 @@
 # Variable overrides
 *.tfvars
 
-*.sh
 notes.txt
