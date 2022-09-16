@@ -59,11 +59,6 @@ variable "security_group_name" {
 
 variable "ssh_key" {}
 
-variable "vpc_name" {
-  type = string
-  default = "r014-3d056da0-0771-4d5a-91ce-5a826667bd05"
-}
-
 variable "region" {
   type = string
   default = "us-east"
