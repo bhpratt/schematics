@@ -1,6 +1,6 @@
 variable "vpc_name" {
   type = string
-  default = "satellite-vpc"
+  default = "satellite-vpc-1"
 }
 
 variable "classic_access" {
