@@ -64,4 +64,25 @@ variable "region" {
   default = "us-east"
 }
 
+variable "location" {
+  description = "Location Name"
+  type        = string
+  default = "satellite-workshop"
+}
 
+variable "managed_from" {
+  description = "The IBM Cloud region to manage your Satellite location from. Choose a region close to your on-prem data center for better performance."
+  type        = string
+  default     = "wdc"
+}
+
+variable "location_zones" {
+  description = "Allocate your hosts across these three zones"
+  type        = list(string)
+  default     = ["us-east-1", "us-east-2", "us-east-3"]
+}
+
+variable "location_bucket" {
+  description = "COS bucket name"
+  default     = null
+}
