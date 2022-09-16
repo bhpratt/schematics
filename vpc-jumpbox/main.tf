@@ -1,6 +1,43 @@
+# name of resource group
+data "ibm_resource_group" "resource_group" {
+  name = var.resource_group
+}
+
+# name of VPC
+resource "ibm_is_vpc" "vpc1" {
+  name = var.vpc_name
+  # Only one VPC per region can have classic access
+  classic_access = var.classic_access
+  resource_group = ibm_resource_group.resource_group.id
+}
+
+# VPC subnets. Uses default CIDR range
+resource "ibm_is_subnet" "subnet1" {
+  name                     = "${var.region}-1"
+  vpc                      = ibm_is_vpc.vpc1.id
+  zone                     = "${var.region}-1"
+  total_ipv4_address_count = 256
+  public_gateway           = ibm_is_public_gateway.gateway_subnet1.id
+  resource_group = local.rg_id
+}
+
+# Include public gateway for connectivity outside of VPC
+# To remove public gateway, cancel out this block and line in subnet1
+resource "ibm_is_public_gateway" "gateway_subnet1" {
+  name       = "satellite-vpc-gateway"
+  vpc        = ibm_is_vpc.vpc1.id
+  zone       = "${var.region}-1"
+  resource_group = local.rg_id
+
+  //User can configure timeouts
+  timeouts {
+     create = "90m"
+  }
+ }
+
 resource "ibm_is_security_group" "group" {
   name = var.security_group_name
-  vpc  = var.vpc_name
+  vpc  = ibm_is_vpc.vpc1.name
 }
 
 //only allow a specified source IP
@@ -24,12 +61,12 @@ resource "ibm_is_instance" "jumpbox" {
   profile = var.jumpbox_profile
 
   primary_network_interface {
-    subnet = "0757-b7efcefc-2de3-428f-81f4-e5ceb0d09d95"
+    subnet = ibm_is_subnet.subnet1.id
     security_groups = [ibm_is_security_group.group.id]
   }
 
   vpc  = var.vpc_name
-  zone = "us-east-1"
+  zone = "${var.region}-1"
   keys = [var.ssh_key]
   user_data = templatefile("./jumpbox_config.sh", {
     API_KEY = var.ibmcloud_api_key

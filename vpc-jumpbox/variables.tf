@@ -1,3 +1,18 @@
+variable "vpc_name" {
+  type = string
+  default = "satellite-vpc"
+}
+
+variable "classic_access" {
+  type = string
+  default = "false"
+}
+
+variable "resource_group" {
+  type = string
+  default = "default"
+}
+
 variable "ibmcloud_api_key" {}
 
 variable "my_ip" {}
