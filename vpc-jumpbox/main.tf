@@ -90,6 +90,7 @@ output "instance_ip_addr" {
 
 resource "ibm_satellite_location" "location" {
   location          = var.location
+  coreos_enabled    = var.coreos_enabled
   managed_from      = var.managed_from
   zones             = var.location_zones
   resource_group_id = data.ibm_resource_group.resource_group.id

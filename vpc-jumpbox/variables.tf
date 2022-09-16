@@ -82,6 +82,12 @@ variable "location_zones" {
   default     = ["us-east-1", "us-east-2", "us-east-3"]
 }
 
+variable "coreos_enabled" {
+  description = "If location is enabled for CoreOS hosts"
+  type        = bool
+  default     = true
+}
+
 variable "location_bucket" {
   description = "COS bucket name"
   default     = null
