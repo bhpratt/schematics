@@ -101,3 +101,133 @@ resource "ibm_satellite_location" "location" {
 
   depends_on = [ibm_is_vpc.vpc1]
 }
+
+resource "ibm_is_instance" "ibm_host" {
+  count = var.host_count
+
+  depends_on     = [ibm_satellite_location.location]
+  name           = "control-${count.index + 1}"
+  vpc            = ibm_is_vpc.vpc1.id
+  zone           = "${var.region}-1"
+  keys           = [var.ssh_key]
+  image          = var.worker_image
+  profile        = var.control_profile
+  resource_group = data.ibm_resource_group.resource_group.id
+  user_data      = data.ibm_satellite_attach_host_script.script.host_script
+
+  primary_network_interface {
+    subnet = ibm_is_subnet.subnet1.id
+  }
+}
+
+data "ibm_satellite_attach_host_script" "script" {
+  location      = ibm_satellite_location.location.id
+  host_provider = "ibm"
+}
+
+//assign one host first to allow creation of new default worker pool
+resource "ibm_satellite_host" "assign_host_first" {
+  location      = var.location
+  host_id       = "control-1"
+  zone          = "us-east-1"
+  host_provider = "ibm"
+  depends_on     = [ibm_is_instance.ibm_host]
+}
+
+resource "time_sleep" "wait_30_seconds" {
+  depends_on = [ibm_is_instance.ibm_host]
+
+  create_duration = "60s"
+}
+
+//once race condition is fixed, use this stanza to assign all 3 hosts
+# resource "ibm_satellite_host" "assign_host" {
+#   count = var.host_count
+
+#   location      = var.location
+#   host_id       = "control-${count.index}"
+#   zone          = element(var.location_zones, count.index)
+#   host_provider = "ibm"
+#   depends_on     = [time_sleep.wait_30_seconds]
+# }
+
+resource "ibm_satellite_host" "assign_host_second" {
+  location      = var.location
+  host_id       = "control-2"
+  zone          = "us-east-2"
+  host_provider = "ibm"
+  depends_on     = [ibm_satellite_host.assign_host_first]
+}
+
+resource "ibm_satellite_host" "assign_host_third" {
+  location      = var.location
+  host_id       = "control-3"
+  zone          = "us-east-3"
+  host_provider = "ibm"
+  depends_on     = [ibm_satellite_host.assign_host_first]
+}
+
+//add this rule to the default security group
+resource "ibm_is_security_group_rule" "allow_jumpbox" {
+  group      = ibm_is_vpc.vpc1.default_security_group
+  direction  = "inbound"
+  remote     = ibm_is_security_group.group.id
+  depends_on = [ibm_is_security_group.group]
+}
+
+resource "ibm_is_instance" "ibm_worker" {
+  count = var.worker_count
+
+  depends_on     = [ibm_satellite_location.location]
+  name           = "worker-${count.index + 1}"
+  vpc            = ibm_is_vpc.vpc1.id
+  zone           = "${var.region}-1"
+  keys           = [var.ssh_key]
+  image          = var.worker_image
+  profile        = var.control_profile
+  resource_group = data.ibm_resource_group.resource_group.id
+  user_data      = data.ibm_satellite_attach_host_script.script.host_script
+
+  primary_network_interface {
+    subnet = ibm_is_subnet.subnet1.id
+  }
+}
+
+# get the list of available cluster versions in IBM Cloud
+data "ibm_container_cluster_versions" "cluster_versions" {
+}
+
+//buffer before creating a cluster
+resource "time_sleep" "wait_10_minutes" {
+  depends_on = [ibm_satellite_host.assign_host_second, ibm_satellite_host.assign_host_third]
+
+  create_duration = "600s"
+}
+
+resource "ibm_satellite_cluster" "cluster" {
+    name                   = "cluster"  
+    location               = var.location
+    enable_config_admin    = true
+    kube_version           = (var.kube_version != null ? var.kube_version : "${data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions[3]}_openshift")
+    resource_group_id      = data.ibm_resource_group.resource_group.id
+    wait_for_worker_update = true
+    dynamic "zones" {
+        for_each = var.location_zones
+        content {
+            id  = zones.value
+        }
+    }
+    depends_on = [time_sleep.wait_10_minutes]
+    default_worker_pool_labels = {"cpu" = "8"}
+}
+
+resource "ibm_satellite_host" "assign_host_workers" {
+  count = var.worker_count
+
+  location      = var.location
+  cluster       = ibm_satellite_cluster.cluster.id
+  host_id       = "worker-${count.index + 1}"
+  zone          = element(var.location_zones, count.index)
+  host_provider = "ibm"
+  depends_on = [time_sleep.wait_10_minutes]
+}

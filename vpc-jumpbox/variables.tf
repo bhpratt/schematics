@@ -67,7 +67,7 @@ variable "region" {
 variable "location" {
   description = "Location Name"
   type        = string
-  default = "satellite-workshop"
+  default = "satellite-workshop-1"
 }
 
 variable "managed_from" {
@@ -91,4 +91,34 @@ variable "coreos_enabled" {
 variable "location_bucket" {
   description = "COS bucket name"
   default     = null
+}
+
+variable "host_count" {
+  description = "The total number of ibm host to create for control plane"
+  type        = number
+  default     = 3
+}
+
+variable "worker_count" {
+  description = "The total number of ibm host to create for cluster"
+  type        = number
+  default     = 3
+}
+
+variable "worker_image" {
+  description = "Operating system image for the workers created"
+  type        = string
+  //"ibm-redhat-7-9-minimal-amd64-3"
+   default     = "r014-99bbf5ee-bf89-402f-a936-173eeff03ce5"
+}
+
+variable "control_profile" {
+  description = "Profile information of control hosts"
+  type = string
+  default = "mx2-8x64"
+}
+
+variable "kube_version" {
+  type = string
+  default = null
 }
