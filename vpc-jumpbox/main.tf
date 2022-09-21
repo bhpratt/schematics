@@ -218,7 +218,6 @@ resource "ibm_satellite_cluster" "cluster" {
         }
     }
     depends_on = [time_sleep.wait_10_minutes]
-    default_worker_pool_labels = {"cpu" = "8"}
 }
 
 resource "ibm_satellite_host" "assign_host_workers" {

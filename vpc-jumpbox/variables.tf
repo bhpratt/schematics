@@ -1,3 +1,14 @@
+### Global variables
+
+variable "ibmcloud_api_key" {}
+
+variable "resource_group" {
+  type = string
+  default = "default"
+}
+
+### VPC variables
+
 variable "vpc_name" {
   type = string
   default = "satellite-vpc-1"
@@ -8,12 +19,12 @@ variable "classic_access" {
   default = "false"
 }
 
-variable "resource_group" {
+variable "region" {
   type = string
-  default = "default"
+  default = "us-east"
 }
 
-variable "ibmcloud_api_key" {}
+### Jumpbox variables
 
 variable "my_ip" {}
 
@@ -38,6 +49,8 @@ variable "jumpbox_profile" {
   default = "bx2-2x8"
 }
 
+### Startup script variables
+
 variable "login_account_id" {}
 
 variable "login_region" {
@@ -47,9 +60,10 @@ variable "login_region" {
 
 variable "login_username" {}
 
+//version of oc cli to install
 variable "openshift_version" {
   type = string
-  default = "4.10.0"
+  default = "4.9.0"
 }
 
 variable "security_group_name" {
@@ -59,10 +73,7 @@ variable "security_group_name" {
 
 variable "ssh_key" {}
 
-variable "region" {
-  type = string
-  default = "us-east"
-}
+### Satellite variables
 
 variable "location" {
   description = "Location Name"
@@ -99,6 +110,13 @@ variable "host_count" {
   default     = 3
 }
 
+variable "control_profile" {
+  description = "Profile information of control hosts"
+  type = string
+  default = "mx2-8x64"
+}
+
+### OpenShift cluster variables
 variable "worker_count" {
   description = "The total number of ibm host to create for cluster"
   type        = number
@@ -110,12 +128,6 @@ variable "worker_image" {
   type        = string
   //"ibm-redhat-7-9-minimal-amd64-3"
    default     = "r014-99bbf5ee-bf89-402f-a936-173eeff03ce5"
-}
-
-variable "control_profile" {
-  description = "Profile information of control hosts"
-  type = string
-  default = "mx2-8x64"
 }
 
 variable "kube_version" {
