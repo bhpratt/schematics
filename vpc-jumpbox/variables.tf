@@ -26,7 +26,10 @@ variable "region" {
 
 ### Jumpbox variables
 
-variable "my_ip" {}
+variable "my_ip" {
+  description = "IP that is allowed access to the VPC jumpbox"
+  default = null
+}
 
 variable "jumpbox_image" {
   type = string
@@ -78,7 +81,7 @@ variable "ssh_key" {}
 variable "location" {
   description = "Location Name"
   type        = string
-  default = "satellite-workshop-1"
+  default = "satellite-workshop"
 }
 
 variable "managed_from" {
@@ -110,11 +113,20 @@ variable "host_count" {
   default     = 3
 }
 
+variable "control_image" {
+  description = "Operating system image for the control plane hosts"
+  type        = string
+  //"ibm-redhat-7-9-minimal-amd64-3"
+  #  default     = "r014-99bbf5ee-bf89-402f-a936-173eeff03ce5"
+  default = "r014-ccc49740-c0b6-499b-8c76-d7ac9c250fdb"
+}
+
 variable "control_profile" {
   description = "Profile information of control hosts"
   type = string
-  default = "mx2-8x64"
+  default = "bx2d-8x32"
 }
+
 
 ### OpenShift cluster variables
 variable "worker_count" {

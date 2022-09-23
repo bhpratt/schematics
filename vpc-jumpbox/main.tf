@@ -110,7 +110,7 @@ resource "ibm_is_instance" "ibm_host" {
   vpc            = ibm_is_vpc.vpc1.id
   zone           = "${var.region}-1"
   keys           = [var.ssh_key]
-  image          = var.worker_image
+  image          = var.control_image
   profile        = var.control_profile
   resource_group = data.ibm_resource_group.resource_group.id
   user_data      = data.ibm_satellite_attach_host_script.script.host_script
@@ -122,6 +122,13 @@ resource "ibm_is_instance" "ibm_host" {
 
 data "ibm_satellite_attach_host_script" "script" {
   location      = ibm_satellite_location.location.id
+  coreos_host   = true
+  host_provider = "ibm"
+}
+
+data "ibm_satellite_attach_host_script" "worker_script" {
+  location      = ibm_satellite_location.location.id
+  coreos_host   = false
   host_provider = "ibm"
 }
 
@@ -186,7 +193,7 @@ resource "ibm_is_instance" "ibm_worker" {
   image          = var.worker_image
   profile        = var.control_profile
   resource_group = data.ibm_resource_group.resource_group.id
-  user_data      = data.ibm_satellite_attach_host_script.script.host_script
+  user_data      = data.ibm_satellite_attach_host_script.worker_script.host_script
 
   primary_network_interface {
     subnet = ibm_is_subnet.subnet1.id
@@ -228,5 +235,4 @@ resource "ibm_satellite_host" "assign_host_workers" {
   host_id       = "worker-${count.index + 1}"
   zone          = element(var.location_zones, count.index)
   host_provider = "ibm"
-  depends_on = [time_sleep.wait_10_minutes]
 }
