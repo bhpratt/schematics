@@ -52,6 +52,23 @@ printf 'kk () {\n CLUS=$(kubectl config current-context) \n echo $(tput setaf 4)
 # move to root so plugins are installed correctly
 cd ~/
 
+#create key so user can ssh into satellite hosts
+cat <<'EOF' >> ~/.ssh/id_rsa
+${SSH_KEY}
+EOF
+
+chmod 600 ~/.ssh/id_rsa
+
+#remove last line to get rid of invalid return character
+sed -i '$ d' ~/.ssh/id_rsa
+
+echo '-----END OPENSSH PRIVATE KEY-----' >> ~/.ssh/id_rsa
+
+#start ssh agent
+eval `ssh-agent -s`
+
+ssh-add
+
 #install all plugins
 ibmcloud plugin install -f container-service
 ibmcloud plugin install -f container-registry

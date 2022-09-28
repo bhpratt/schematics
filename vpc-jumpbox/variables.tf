@@ -11,7 +11,7 @@ variable "resource_group" {
 
 variable "vpc_name" {
   type = string
-  default = "satellite-vpc-1"
+  default = "satellite-vpc"
 }
 
 variable "classic_access" {
@@ -50,6 +50,11 @@ variable "jumpbox_name" {
 variable "jumpbox_profile" {
   type = string
   default = "bx2-2x8"
+}
+
+variable "jumpbox_ssh_key" {
+  type = string
+  default = null
 }
 
 ### Startup script variables
@@ -124,11 +129,22 @@ variable "control_image" {
 variable "control_profile" {
   description = "Profile information of control hosts"
   type = string
-  default = "bx2d-8x32"
+  default = "cx2d-16x32"
 }
 
 
 ### OpenShift cluster variables
+
+variable "cluster_name" {
+  type = string
+  default = "satellite-vpc"
+}
+
+variable "worker_host_provider" {
+  type = string
+  default = "ibm"
+}
+
 variable "worker_count" {
   description = "The total number of ibm host to create for cluster"
   type        = number
@@ -139,7 +155,15 @@ variable "worker_image" {
   description = "Operating system image for the workers created"
   type        = string
   //"ibm-redhat-7-9-minimal-amd64-3"
-   default     = "r014-99bbf5ee-bf89-402f-a936-173eeff03ce5"
+  #  default     = "r014-99bbf5ee-bf89-402f-a936-173eeff03ce5"
+   //ibm-redhat-8-6-minimal-amd64-2 
+   default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
+}
+
+variable "worker_profile" {
+  description = "Profile information of workers"
+  type = string
+  default = "bx2d-4x16"
 }
 
 variable "kube_version" {

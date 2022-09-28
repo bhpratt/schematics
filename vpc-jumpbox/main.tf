@@ -3,9 +3,15 @@ data "ibm_resource_group" "resource_group" {
   name = var.resource_group
 }
 
+ resource "random_string" "id" {
+  length = 4
+  special = false
+  upper = false
+}
+
 # name of VPC
 resource "ibm_is_vpc" "vpc1" {
-  name = var.vpc_name
+  name = "${var.vpc_name}-${random_string.id.result}"
   # Only one VPC per region can have classic access
   classic_access = var.classic_access
   resource_group = data.ibm_resource_group.resource_group.id
@@ -70,11 +76,12 @@ resource "ibm_is_instance" "jumpbox" {
   zone = "${var.region}-1"
   keys = [var.ssh_key]
   user_data = templatefile("./jumpbox_config.sh", {
-    API_KEY = var.ibmcloud_api_key
-    LOGIN_ACCOUNT = var.login_account_id
-    LOGIN_USERNAME = var.login_username
-    LOGIN_REGION = var.login_region
+    API_KEY           = var.ibmcloud_api_key
+    LOGIN_ACCOUNT     = var.login_account_id
+    LOGIN_USERNAME    = var.login_username
+    LOGIN_REGION      = var.login_region
     OPENSHIFT_VERSION = var.openshift_version
+    SSH_KEY           = (trimspace(var.jumpbox_ssh_key))
     })
   depends_on = [ibm_is_security_group_rule.rule2]
 }
@@ -89,7 +96,7 @@ output "instance_ip_addr" {
 }
 
 resource "ibm_satellite_location" "location" {
-  location          = var.location
+  location          = "${var.location}-${random_string.id.result}"
   coreos_enabled    = var.coreos_enabled
   managed_from      = var.managed_from
   zones             = var.location_zones
@@ -129,12 +136,17 @@ data "ibm_satellite_attach_host_script" "script" {
 data "ibm_satellite_attach_host_script" "worker_script" {
   location      = ibm_satellite_location.location.id
   coreos_host   = false
-  host_provider = "ibm"
+  # host_provider = var.worker_host_provider
+  custom_script = <<EOF
+subscription-manager refresh
+subscription-manager repos --enable rhel-8-for-x86_64-appstream-rpms
+subscription-manager repos --enable rhel-8-for-x86_64-baseos-rpms
+EOF
 }
 
 //assign one host first to allow creation of new default worker pool
 resource "ibm_satellite_host" "assign_host_first" {
-  location      = var.location
+  location      = ibm_satellite_location.location.id
   host_id       = "control-1"
   zone          = "us-east-1"
   host_provider = "ibm"
@@ -151,7 +163,7 @@ resource "time_sleep" "wait_30_seconds" {
 # resource "ibm_satellite_host" "assign_host" {
 #   count = var.host_count
 
-#   location      = var.location
+#   location      = ibm_satellite_location.location.id
 #   host_id       = "control-${count.index}"
 #   zone          = element(var.location_zones, count.index)
 #   host_provider = "ibm"
@@ -159,7 +171,7 @@ resource "time_sleep" "wait_30_seconds" {
 # }
 
 resource "ibm_satellite_host" "assign_host_second" {
-  location      = var.location
+  location      = ibm_satellite_location.location.id
   host_id       = "control-2"
   zone          = "us-east-2"
   host_provider = "ibm"
@@ -167,7 +179,7 @@ resource "ibm_satellite_host" "assign_host_second" {
 }
 
 resource "ibm_satellite_host" "assign_host_third" {
-  location      = var.location
+  location      = ibm_satellite_location.location.id
   host_id       = "control-3"
   zone          = "us-east-3"
   host_provider = "ibm"
@@ -191,7 +203,7 @@ resource "ibm_is_instance" "ibm_worker" {
   zone           = "${var.region}-1"
   keys           = [var.ssh_key]
   image          = var.worker_image
-  profile        = var.control_profile
+  profile        = var.worker_profile
   resource_group = data.ibm_resource_group.resource_group.id
   user_data      = data.ibm_satellite_attach_host_script.worker_script.host_script
 
@@ -212,11 +224,12 @@ resource "time_sleep" "wait_10_minutes" {
 }
 
 resource "ibm_satellite_cluster" "cluster" {
-    name                   = "cluster"  
-    location               = var.location
+    name                   = "${var.cluster_name}-${random_string.id.result}"
+    location               = ibm_satellite_location.location.id
     enable_config_admin    = true
     kube_version           = (var.kube_version != null ? var.kube_version : "${data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions[3]}_openshift")
     resource_group_id      = data.ibm_resource_group.resource_group.id
+    operating_system       = "REDHAT_8_64"
     wait_for_worker_update = true
     dynamic "zones" {
         for_each = var.location_zones
@@ -230,7 +243,7 @@ resource "ibm_satellite_cluster" "cluster" {
 resource "ibm_satellite_host" "assign_host_workers" {
   count = var.worker_count
 
-  location      = var.location
+  location      = ibm_satellite_location.location.id
   cluster       = ibm_satellite_cluster.cluster.id
   host_id       = "worker-${count.index + 1}"
   zone          = element(var.location_zones, count.index)
