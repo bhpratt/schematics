@@ -54,8 +54,15 @@ resource "ibm_is_security_group_rule" "rule1" {
   depends_on = [ibm_is_security_group.group]
 }
 
-//allow all outbound
 resource "ibm_is_security_group_rule" "rule2" {
+  group      = ibm_is_security_group.group.id
+  direction  = "inbound"
+  remote     = var.my_work_ip
+  depends_on = [ibm_is_security_group.group]
+}
+
+//allow all outbound
+resource "ibm_is_security_group_rule" "rule3" {
   group      = ibm_is_security_group.group.id
   direction  = "outbound"
   depends_on = [ibm_is_security_group_rule.rule1]
@@ -229,7 +236,7 @@ resource "ibm_satellite_cluster" "cluster" {
     enable_config_admin    = true
     kube_version           = (var.kube_version != null ? var.kube_version : "${data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions[3]}_openshift")
     resource_group_id      = data.ibm_resource_group.resource_group.id
-    operating_system       = "REDHAT_8_64"
+    # operating_system       = "REDHAT_8_64"
     wait_for_worker_update = true
     dynamic "zones" {
         for_each = var.location_zones
@@ -248,4 +255,4 @@ resource "ibm_satellite_host" "assign_host_workers" {
   host_id       = "worker-${count.index + 1}"
   zone          = element(var.location_zones, count.index)
   host_provider = "ibm"
-}
+}  

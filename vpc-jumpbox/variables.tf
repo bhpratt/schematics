@@ -31,6 +31,11 @@ variable "my_ip" {
   default = null
 }
 
+variable "my_work_ip" {
+  description = "Secondary IP that is allowed access to the VPC jumpbox"
+  default = null
+}
+
 variable "jumpbox_image" {
   type = string
   //ibm-centos-7-9-minimal-amd64-6 | ibmcloud is images
@@ -121,8 +126,9 @@ variable "host_count" {
 variable "control_image" {
   description = "Operating system image for the control plane hosts"
   type        = string
-  //"ibm-redhat-7-9-minimal-amd64-3"
-  #  default     = "r014-99bbf5ee-bf89-402f-a936-173eeff03ce5"
+  //"ibm-redhat-7-9-minimal-amd64-7"
+  #  default     = "r014-b7cd149d-626d-4e55-9a40-cef90b3a74fb"
+  //coreos
   default = "r014-ccc49740-c0b6-499b-8c76-d7ac9c250fdb"
 }
 
@@ -154,10 +160,10 @@ variable "worker_count" {
 variable "worker_image" {
   description = "Operating system image for the workers created"
   type        = string
-  //"ibm-redhat-7-9-minimal-amd64-3"
-  #  default     = "r014-99bbf5ee-bf89-402f-a936-173eeff03ce5"
+  //"ibm-redhat-7-9-minimal-amd64-7"
+   default     = "r014-b7cd149d-626d-4e55-9a40-cef90b3a74fb"
    //ibm-redhat-8-6-minimal-amd64-2 
-   default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
+  #  default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
 }
 
 variable "worker_profile" {
