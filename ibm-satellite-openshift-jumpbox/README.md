@@ -12,6 +12,9 @@ This set of Terraform scripts provisions the following:
 
 ## Commands
 
+### Build
 - terraform init
 - terraform apply -auto-approve -var-file=input.tfvars
+
+### Destroy
 - terraform apply -destroy -auto-approve -var-file=input.tfvars 
