@@ -143,12 +143,12 @@ data "ibm_satellite_attach_host_script" "script" {
 data "ibm_satellite_attach_host_script" "worker_script" {
   location      = ibm_satellite_location.location.id
   coreos_host   = false
-  # host_provider = var.worker_host_provider
-  custom_script = <<EOF
-subscription-manager refresh
-subscription-manager repos --enable rhel-8-for-x86_64-appstream-rpms
-subscription-manager repos --enable rhel-8-for-x86_64-baseos-rpms
-EOF
+  host_provider = var.worker_host_provider
+  # custom_script = <<EOF
+# subscription-manager refresh
+# subscription-manager repos --enable rhel-8-for-x86_64-appstream-rpms
+# subscription-manager repos --enable rhel-8-for-x86_64-baseos-rpms
+# EOF
 }
 
 //assign one host first to allow creation of new default worker pool
