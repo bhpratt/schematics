@@ -113,7 +113,7 @@ resource "ibm_satellite_location" "location" {
     bucket = var.location_bucket != null ? var.location_bucket : null
   }
 
-  depends_on = [ibm_is_vpc.vpc1]
+  # depends_on = [ibm_is_vpc.vpc1]
 }
 
 resource "ibm_is_instance" "ibm_host" {
