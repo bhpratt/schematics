@@ -151,6 +151,11 @@ variable "worker_host_provider" {
   default = "ibm"
 }
 
+variable "worker_custom_script" {
+  type = string
+  default = null
+}
+
 variable "worker_count" {
   description = "The total number of ibm host to create for cluster"
   type        = number
