@@ -15,6 +15,12 @@ curl -fsSL https://clis.cloud.ibm.com/install/linux | sh
 echo "Installing Helm 3"
 curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
 
+curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl &&\
+
+# Update the permissions for and the location of the Kubernetes CLI executable file
+chmod +x ./kubectl &&\
+mv ./kubectl /usr/local/bin/kubectl
+
 #install oc cli
 echo "Installing version ${OPENSHIFT_VERSION} of the OpenShift CLI"
 curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/${OPENSHIFT_VERSION}/openshift-client-linux.tar.gz &&\
@@ -24,12 +30,6 @@ tar -xvf openshift-client-linux.tar.gz &&\
 
 #move executables to bin
 mv oc /usr/local/bin/oc
-
-curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl &&\
-
-# Update the permissions for and the location of the Kubernetes CLI executable file
-chmod +x ./kubectl &&\
-mv ./kubectl /usr/local/bin/kubectl
 
 #Install shortcut command for logging into IBM Cloud account
 cat <<'EOF' >>gobx
