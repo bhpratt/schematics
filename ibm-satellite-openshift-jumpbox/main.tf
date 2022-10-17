@@ -30,7 +30,7 @@ resource "ibm_is_subnet" "subnet1" {
 # Include public gateway for connectivity outside of VPC
 # To remove public gateway, cancel out this block and line in subnet1
 resource "ibm_is_public_gateway" "gateway_subnet1" {
-  name       = "satellite-vpc-gateway"
+  name       = "satellite-vpc-gateway-${random_string.id.result}"
   vpc        = ibm_is_vpc.vpc1.id
   zone       = "${var.region}-1"
   resource_group = data.ibm_resource_group.resource_group.id
@@ -42,7 +42,7 @@ resource "ibm_is_public_gateway" "gateway_subnet1" {
  }
 
 resource "ibm_is_security_group" "group" {
-  name = var.security_group_name
+  name = "${var.security_group_name}-${random_string.id.result}"
   vpc  = ibm_is_vpc.vpc1.id
 }
 
@@ -69,7 +69,7 @@ resource "ibm_is_security_group_rule" "rule3" {
 }
 
 resource "ibm_is_instance" "jumpbox" {
-  name    = var.jumpbox_name
+  name    = "${var.jumpbox_name}-${random_string.id.result}"
   image   = var.jumpbox_image
   profile = var.jumpbox_profile
   resource_group = data.ibm_resource_group.resource_group.id
@@ -94,7 +94,7 @@ resource "ibm_is_instance" "jumpbox" {
 }
 
 resource "ibm_is_floating_ip" "floating_ip" {
-  name   = var.jumpbox_floating_ip_name
+  name   = "${var.jumpbox_floating_ip_name}-${random_string.id.result}"
   target = ibm_is_instance.jumpbox.primary_network_interface[0].id
 }
 
@@ -120,7 +120,7 @@ resource "ibm_is_instance" "ibm_host" {
   count = var.host_count
 
   depends_on     = [ibm_satellite_location.location]
-  name           = "control-${count.index + 1}"
+  name           = "control-${random_string.id.result}-${count.index + 1}"
   vpc            = ibm_is_vpc.vpc1.id
   zone           = "${var.region}-1"
   keys           = [var.ssh_key]
@@ -155,7 +155,7 @@ data "ibm_satellite_attach_host_script" "worker_script" {
 //assign one host first to allow creation of new default worker pool
 resource "ibm_satellite_host" "assign_host_first" {
   location      = ibm_satellite_location.location.id
-  host_id       = "control-1"
+  host_id       = "control-${random_string.id.result}-1"
   zone          = "us-east-1"
   host_provider = "ibm"
   depends_on     = [ibm_is_instance.ibm_host]
@@ -180,7 +180,7 @@ resource "time_sleep" "wait_30_seconds" {
 
 resource "ibm_satellite_host" "assign_host_second" {
   location      = ibm_satellite_location.location.id
-  host_id       = "control-2"
+  host_id       = "control-${random_string.id.result}-2"
   zone          = "us-east-2"
   host_provider = "ibm"
   depends_on     = [ibm_satellite_host.assign_host_first]
@@ -188,7 +188,7 @@ resource "ibm_satellite_host" "assign_host_second" {
 
 resource "ibm_satellite_host" "assign_host_third" {
   location      = ibm_satellite_location.location.id
-  host_id       = "control-3"
+  host_id       = "control-${random_string.id.result}-3"
   zone          = "us-east-3"
   host_provider = "ibm"
   depends_on     = [ibm_satellite_host.assign_host_first]
@@ -206,7 +206,7 @@ resource "ibm_is_instance" "ibm_worker" {
   count = var.worker_count
 
   depends_on     = [ibm_satellite_location.location]
-  name           = "worker-${count.index + 1}"
+  name           = "worker-${random_string.id.result}-${count.index + 1}"
   vpc            = ibm_is_vpc.vpc1.id
   zone           = "${var.region}-1"
   keys           = [var.ssh_key]
@@ -253,7 +253,7 @@ resource "ibm_satellite_host" "assign_host_workers" {
 
   location      = ibm_satellite_location.location.id
   cluster       = ibm_satellite_cluster.cluster.id
-  host_id       = "worker-${count.index + 1}"
+  host_id       = "worker-${random_string.id.result}-${count.index + 1}"
   zone          = element(var.location_zones, count.index)
   host_provider = "ibm"
 }
