@@ -251,7 +251,7 @@ resource "ibm_satellite_cluster" "cluster" {
     depends_on = [time_sleep.wait_10_minutes]
 
       timeouts {
-    create = "=60m"
+    create = "60m"
   }
 }
 
