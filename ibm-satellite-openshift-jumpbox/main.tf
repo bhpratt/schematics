@@ -113,7 +113,10 @@ resource "ibm_satellite_location" "location" {
     bucket = var.location_bucket != null ? var.location_bucket : null
   }
 
-  # depends_on = [ibm_is_vpc.vpc1]
+  timeouts {
+    create = "45m"
+  }
+
 }
 
 resource "ibm_is_instance" "ibm_host" {
@@ -246,6 +249,10 @@ resource "ibm_satellite_cluster" "cluster" {
         }
     }
     depends_on = [time_sleep.wait_10_minutes]
+
+      timeouts {
+    create = "=60m"
+  }
 }
 
 resource "ibm_satellite_host" "assign_host_workers" {
