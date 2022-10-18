@@ -240,7 +240,7 @@ resource "ibm_satellite_cluster" "cluster" {
     enable_config_admin    = true
     kube_version           = (var.kube_version != null ? var.kube_version : "${data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions[3]}_openshift")
     resource_group_id      = data.ibm_resource_group.resource_group.id
-    operating_system       = "REDHAT_8_64"
+    operating_system       = var.cluster_operating_system
     wait_for_worker_update = true
     dynamic "zones" {
         for_each = var.location_zones

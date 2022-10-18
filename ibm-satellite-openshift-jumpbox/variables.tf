@@ -146,6 +146,12 @@ variable "cluster_name" {
   default = "satellite-vpc"
 }
 
+variable "cluster_operating_system" {
+  description = "Operating system for the default worker pool"
+  type = string
+  default = "REDHAT_8_64"
+}
+
 variable "worker_host_provider" {
   type = string
   default = "ibm"
