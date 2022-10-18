@@ -166,9 +166,9 @@ variable "worker_image" {
   description = "Operating system image for the workers created"
   type        = string
   //"ibm-redhat-7-9-minimal-amd64-7"
-   default     = "r014-b7cd149d-626d-4e55-9a40-cef90b3a74fb"
+  #  default     = "r014-b7cd149d-626d-4e55-9a40-cef90b3a74fb"
    //ibm-redhat-8-6-minimal-amd64-2 
-  #  default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
+   default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
 }
 
 variable "worker_profile" {
