@@ -6,9 +6,9 @@ terraform {
      required_providers {
         ibm = {
            source = "IBM-Cloud/ibm"
-          #  version = ">= 1.45"
-          #  version = "1.1.0"
-            version = "1.47.0-beta2"
+           version = "1.45"
+          #  version = "1.2.0"
+            # version = "1.47.0-beta2"
            }
       }
   required_version = ">= 0.13"
