@@ -123,6 +123,12 @@ variable "host_count" {
   default     = 3
 }
 
+variable "control_coreos_os" {
+  description = "Whether the control plane hosts are CoreOS"
+  type        = bool
+  default     = true
+}
+
 variable "control_image" {
   description = "Operating system image for the control plane hosts"
   type        = string

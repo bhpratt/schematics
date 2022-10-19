@@ -139,7 +139,7 @@ resource "ibm_is_instance" "ibm_host" {
 
 data "ibm_satellite_attach_host_script" "script" {
   location      = ibm_satellite_location.location.id
-  coreos_host   = true
+  coreos_host   = var.control_coreos_os
   host_provider = "ibm"
 }
 
