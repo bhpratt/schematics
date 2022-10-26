@@ -7,8 +7,8 @@ terraform {
         ibm = {
            source = "IBM-Cloud/ibm"
           #  version = "1.45"
-          #  version = "1.2.1-dev"
-            version = "1.47.0-beta2"
+          #  version = "1.2.2-dev"
+            version = "1.47.0-beta3"
            }
       }
   required_version = ">= 0.13"
