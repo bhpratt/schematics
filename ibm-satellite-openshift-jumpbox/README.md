@@ -6,7 +6,7 @@ This set of Terraform scripts provisions the following:
 2. VSI to use as a jumpbox to access hosts in IBM Cloud Satellite
 3. Security groups to allow satellite hosts and jumpbox to have network connectivity. Optionally, user can provide IP address(es) to allow external ssh access to the jumpbox.
 4. IBM Cloud Satellite location
-5. 6 VPC VSIs (3 for location control plane, 3 for OpenShift cluster)
+5. 9 VPC VSIs (6 for location control plane, 3 for OpenShift cluster)
 6. OpenShift cluster in Satellite location.
 
 
