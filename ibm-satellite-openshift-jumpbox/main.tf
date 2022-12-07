@@ -147,7 +147,7 @@ data "ibm_satellite_attach_host_script" "control_script" {
 
 data "ibm_satellite_attach_host_script" "worker_script" {
   location      = ibm_satellite_location.location.id
-  coreos_host   = var.control_coreos_os
+  coreos_host   = var.worker_coreos_os
   custom_script = var.worker_custom_script
   host_provider = var.worker_host_provider
   labels        = ["type:assigncluster"]
@@ -162,10 +162,10 @@ resource "ibm_satellite_host" "assign_host_first" {
   depends_on     = [ibm_is_instance.ibm_host]
 }
 
-resource "time_sleep" "wait_30_seconds" {
+resource "time_sleep" "wait_120_seconds" {
   depends_on = [ibm_is_instance.ibm_host]
 
-  create_duration = "60s"
+  create_duration = "120s"
 }
 
 //once race condition is fixed, use this stanza to assign all 3 hosts
@@ -184,7 +184,7 @@ resource "ibm_satellite_host" "assign_host_second" {
   host_id       = "control-${random_string.id.result}-2"
   zone          = "us-east-2"
   host_provider = "ibm"
-  depends_on     = [ibm_satellite_host.assign_host_first]
+  depends_on     = [time_sleep.wait_120_seconds]
 }
 
 resource "ibm_satellite_host" "assign_host_third" {
@@ -192,7 +192,7 @@ resource "ibm_satellite_host" "assign_host_third" {
   host_id       = "control-${random_string.id.result}-3"
   zone          = "us-east-3"
   host_provider = "ibm"
-  depends_on     = [ibm_satellite_host.assign_host_first]
+  depends_on     = [time_sleep.wait_120_seconds]
 }
 
 resource "ibm_satellite_host" "assign_host_fourth" {
@@ -200,7 +200,7 @@ resource "ibm_satellite_host" "assign_host_fourth" {
   host_id       = "control-${random_string.id.result}-4"
   zone          = "us-east-1"
   host_provider = "ibm"
-  depends_on     = [ibm_satellite_host.assign_host_first]
+  depends_on     = [time_sleep.wait_120_seconds]
 }
 
 resource "ibm_satellite_host" "assign_host_fifth" {
@@ -208,7 +208,7 @@ resource "ibm_satellite_host" "assign_host_fifth" {
   host_id       = "control-${random_string.id.result}-5"
   zone          = "us-east-2"
   host_provider = "ibm"
-  depends_on     = [ibm_satellite_host.assign_host_first]
+  depends_on     = [time_sleep.wait_120_seconds]
 }
 
 resource "ibm_satellite_host" "assign_host_sixth" {
@@ -216,7 +216,7 @@ resource "ibm_satellite_host" "assign_host_sixth" {
   host_id       = "control-${random_string.id.result}-6"
   zone          = "us-east-3"
   host_provider = "ibm"
-  depends_on     = [ibm_satellite_host.assign_host_first]
+  depends_on     = [time_sleep.wait_120_seconds]
 }
 
 //add this rule to the default security group
