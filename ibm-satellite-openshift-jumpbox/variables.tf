@@ -120,13 +120,23 @@ variable "location_bucket" {
 variable "host_count" {
   description = "The total number of ibm host to create for control plane"
   type        = number
-  default     = 3
+  default     = 6
+}
+
+variable "control_host_provider" {
+  type = string
+  default = null
 }
 
 variable "control_coreos_os" {
   description = "Whether the control plane hosts are CoreOS"
   type        = bool
-  default     = true
+  default     = false
+}
+
+variable "control_custom_script" {
+  type = string
+  default = null
 }
 
 variable "control_image" {
@@ -135,13 +145,16 @@ variable "control_image" {
   //"ibm-redhat-7-9-minimal-amd64-7"
   #  default     = "r014-b7cd149d-626d-4e55-9a40-cef90b3a74fb"
   //coreos
-  default = "r014-ccc49740-c0b6-499b-8c76-d7ac9c250fdb"
+  # default = "r014-ccc49740-c0b6-499b-8c76-d7ac9c250fdb"
+  //ibm-redhat-8-6-minimal-amd64-2 
+   default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
 }
 
 variable "control_profile" {
   description = "Profile information of control hosts"
   type = string
-  default = "cx2d-16x32"
+  # default = "cx2d-16x32"
+  default = "bx2d-4x16"
 }
 
 
@@ -163,6 +176,12 @@ variable "worker_host_provider" {
   default = "ibm"
 }
 
+variable "worker_coreos_os" {
+  description = "Whether the worker hosts are CoreOS"
+  type        = bool
+  default     = true
+}
+
 variable "worker_custom_script" {
   type = string
   default = null
@@ -180,7 +199,9 @@ variable "worker_image" {
   //"ibm-redhat-7-9-minimal-amd64-7"
   #  default     = "r014-b7cd149d-626d-4e55-9a40-cef90b3a74fb"
    //ibm-redhat-8-6-minimal-amd64-2 
-   default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
+  #  default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
+     //coreos
+  default = "r014-ccc49740-c0b6-499b-8c76-d7ac9c250fdb"
 }
 
 variable "worker_profile" {

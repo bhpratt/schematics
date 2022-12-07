@@ -130,32 +130,30 @@ resource "ibm_is_instance" "ibm_host" {
   image          = var.control_image
   profile        = var.control_profile
   resource_group = data.ibm_resource_group.resource_group.id
-  user_data      = data.ibm_satellite_attach_host_script.script.host_script
+  user_data      = data.ibm_satellite_attach_host_script.control_script.host_script
 
   primary_network_interface {
     subnet = ibm_is_subnet.subnet1.id
   }
 }
 
-data "ibm_satellite_attach_host_script" "script" {
+data "ibm_satellite_attach_host_script" "control_script" {
   location      = ibm_satellite_location.location.id
   coreos_host   = var.control_coreos_os
-  host_provider = "ibm"
+  custom_script = var.control_custom_script
+  host_provider = var.control_host_provider
+
 }
 
 data "ibm_satellite_attach_host_script" "worker_script" {
   location      = ibm_satellite_location.location.id
-  coreos_host   = false
-  # host_provider = var.worker_host_provider
-  # custom_script = <<EOF
-# subscription-manager refresh
-# subscription-manager repos --enable rhel-8-for-x86_64-appstream-rpms
-# subscription-manager repos --enable rhel-8-for-x86_64-baseos-rpms
-# EOF
+  coreos_host   = var.control_coreos_os
   custom_script = var.worker_custom_script
+  host_provider = var.worker_host_provider
+  labels        = ["type:assigncluster"]
 }
 
-//assign one host first to allow creation of new default worker pool
+//assign one host first to the control plane to allow creation of new default worker pool
 resource "ibm_satellite_host" "assign_host_first" {
   location      = ibm_satellite_location.location.id
   host_id       = "control-${random_string.id.result}-1"
@@ -197,6 +195,30 @@ resource "ibm_satellite_host" "assign_host_third" {
   depends_on     = [ibm_satellite_host.assign_host_first]
 }
 
+resource "ibm_satellite_host" "assign_host_fourth" {
+  location      = ibm_satellite_location.location.id
+  host_id       = "control-${random_string.id.result}-4"
+  zone          = "us-east-1"
+  host_provider = "ibm"
+  depends_on     = [ibm_satellite_host.assign_host_first]
+}
+
+resource "ibm_satellite_host" "assign_host_fifth" {
+  location      = ibm_satellite_location.location.id
+  host_id       = "control-${random_string.id.result}-5"
+  zone          = "us-east-2"
+  host_provider = "ibm"
+  depends_on     = [ibm_satellite_host.assign_host_first]
+}
+
+resource "ibm_satellite_host" "assign_host_sixth" {
+  location      = ibm_satellite_location.location.id
+  host_id       = "control-${random_string.id.result}-6"
+  zone          = "us-east-3"
+  host_provider = "ibm"
+  depends_on     = [ibm_satellite_host.assign_host_first]
+}
+
 //add this rule to the default security group
 resource "ibm_is_security_group_rule" "allow_jumpbox" {
   group      = ibm_is_vpc.vpc1.default_security_group
@@ -217,6 +239,7 @@ resource "ibm_is_instance" "ibm_worker" {
   profile        = var.worker_profile
   resource_group = data.ibm_resource_group.resource_group.id
   user_data      = data.ibm_satellite_attach_host_script.worker_script.host_script
+
 
   primary_network_interface {
     subnet = ibm_is_subnet.subnet1.id
@@ -248,6 +271,7 @@ resource "ibm_satellite_cluster" "cluster" {
             id  = zones.value
         }
     }
+
     depends_on = [time_sleep.wait_10_minutes]
 
       timeouts {
@@ -255,30 +279,27 @@ resource "ibm_satellite_cluster" "cluster" {
   }
 }
 
-resource "ibm_satellite_host" "assign_host_workers" {
-  count = var.worker_count
+//this terraform template uses auto-assign of worker nodes via labels. uncomment if using manual assign.
+# resource "ibm_satellite_host" "assign_host_workers" {
+#   count = var.worker_count
 
-  location      = ibm_satellite_location.location.id
-  cluster       = ibm_satellite_cluster.cluster.id
-  host_id       = "worker-${random_string.id.result}-${count.index + 1}"
-  zone          = element(var.location_zones, count.index)
-  host_provider = "ibm"
-}
+#   location      = ibm_satellite_location.location.id
+#   cluster       = ibm_satellite_cluster.cluster.id
+#   host_id       = "worker-${random_string.id.result}-${count.index + 1}"
+#   zone          = element(var.location_zones, count.index)
+#   host_provider = "ibm"
+# }
 
-	# resource "ibm_satellite_cluster_worker_pool" "create_wp" {
-	# 	name               = "test"  
-	# 	cluster            = ibm_satellite_cluster.cluster.id
-	# 	worker_count       = 1   
-	# 	host_labels        = ["env:dev"]
-	# 	operating_system   = "REDHAT_7_64"
-	# 	dynamic "zones" {
-	# 		for_each = var.location_zones
-	# 		content {
-	# 			id	= zones.value
-	# 		}
-	# 	}
-	# 	worker_pool_labels = {
-	# 		"test"  = "test-pool1" 
-	# 		"test1" = "test-pool2"
-	# 	}
-	# }
+	resource "ibm_satellite_cluster_worker_pool" "create_wp" {
+		name               = "rhcos"  
+		cluster            = ibm_satellite_cluster.cluster.id
+		worker_count       = 1
+		host_labels        = ["type:assigncluster"]
+		operating_system   = "RHCOS"
+		dynamic "zones" {
+			for_each = var.location_zones
+			content {
+				id	= zones.value
+			}
+		}
+	}
