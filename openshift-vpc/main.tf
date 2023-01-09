@@ -120,7 +120,14 @@ resource "ibm_resource_instance" "logdna_instance" {
   plan              = "7-day"
 }
 
+resource "ibm_resource_key" "resourceKey" {
+  name                 = "TestKey"
+  resource_instance_id = ibm_resource_instance.logdna_instance.id
+  role                 = "Manager"
+}
+
 resource "ibm_ob_logging" "logging" {
+  depends_on           = [ibm_resource_key.resourceKey]
   cluster              = ibm_container_vpc_cluster.cluster.id
   instance_id          = ibm_resource_instance.logdna_instance.guid
   private_endpoint     = true
