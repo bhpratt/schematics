@@ -121,7 +121,7 @@ resource "ibm_resource_instance" "logdna_instance" {
 }
 
 resource "ibm_ob_logging" "logging" {
-  cluster              = var.cluster
+  cluster              = ibm_container_vpc_cluster.cluster.id
   instance_id          = ibm_resource_instance.logdna_instance.guid
   private_endpoint     = true
 }
