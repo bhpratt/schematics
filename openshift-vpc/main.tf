@@ -118,6 +118,10 @@ resource "ibm_resource_instance" "logdna_instance" {
   resource_group_id = data.ibm_resource_group.resource_group.id
   location          = var.region
   plan              = "7-day"
+
+  output "logdna_instance_id" {
+    value = ibm_resource_instance_logdna_instance.id
+  }
 }
 
 resource "ibm_resource_key" "resourceKey" {
