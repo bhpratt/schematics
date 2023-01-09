@@ -111,29 +111,29 @@ resource "ibm_container_vpc_cluster" "cluster" {
   # }
 }
 
-resource "ibm_resource_instance" "logdna_instance" {
+# resource "ibm_resource_instance" "logdna_instance" {
 
-  name              = "test"
-  service           = "logdna"
-  resource_group_id = data.ibm_resource_group.resource_group.id
-  location          = var.region
-  plan              = "7-day"
+#   name              = "test"
+#   service           = "logdna"
+#   resource_group_id = data.ibm_resource_group.resource_group.id
+#   location          = var.region
+#   plan              = "7-day"
 
-}
+# }
 
-  output "logdna_instance_id" {
-    value = ibm_resource_instance.logdna_instance.id
-  }
+#   output "logdna_instance_id" {
+#     value = ibm_resource_instance.logdna_instance.id
+#   }
 
-resource "ibm_resource_key" "resourceKey" {
-  name                 = "TestKey"
-  resource_instance_id = ibm_resource_instance.logdna_instance.id
-  role                 = "Manager"
-}
+# resource "ibm_resource_key" "resourceKey" {
+#   name                 = "TestKey"
+#   resource_instance_id = ibm_resource_instance.logdna_instance.id
+#   role                 = "Manager"
+# }
 
-resource "ibm_ob_logging" "logging" {
-  depends_on           = [ibm_resource_key.resourceKey]
-  cluster              = ibm_container_vpc_cluster.cluster.id
-  instance_id          = ibm_resource_instance.logdna_instance.guid
-  private_endpoint     = true
-}
+# resource "ibm_ob_logging" "logging" {
+#   depends_on           = [ibm_resource_key.resourceKey]
+#   cluster              = ibm_container_vpc_cluster.cluster.id
+#   instance_id          = ibm_resource_instance.logdna_instance.guid
+#   private_endpoint     = true
+# }
