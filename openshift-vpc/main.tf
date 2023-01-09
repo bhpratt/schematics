@@ -117,6 +117,7 @@ resource "ibm_resource_instance" "logdna_instance" {
   service           = "logdna"
   resource_group_id = data.ibm_resource_group.resource_group.id
   location          = var.region
+  plan              = "7-day"
 }
 
 resource "ibm_ob_logging" "logging" {
