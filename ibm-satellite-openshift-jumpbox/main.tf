@@ -122,7 +122,7 @@ resource "ibm_satellite_location" "location" {
 resource "ibm_is_instance" "ibm_host" {
   count = var.host_count
 
-  depends_on     = [ibm_satellite_location.location]
+  # depends_on     = [ibm_satellite_location.location]
   name           = "control-${random_string.id.result}-${count.index + 1}"
   vpc            = ibm_is_vpc.vpc1.id
   zone           = "${var.region}-1"
@@ -265,6 +265,8 @@ resource "ibm_satellite_cluster" "cluster" {
     resource_group_id      = data.ibm_resource_group.resource_group.id
     operating_system       = var.cluster_operating_system
     wait_for_worker_update = true
+    host_labels            = ["type:assigncluster"]
+
     dynamic "zones" {
         for_each = var.location_zones
         content {
@@ -291,11 +293,11 @@ resource "ibm_satellite_cluster" "cluster" {
 # }
 
 	resource "ibm_satellite_cluster_worker_pool" "create_wp" {
-		name               = "rhcos"  
+		name               = "RHEL8"  
 		cluster            = ibm_satellite_cluster.cluster.id
 		worker_count       = 1
 		host_labels        = ["type:assigncluster"]
-		operating_system   = "RHCOS"
+		operating_system   = "RHEL_8_64"
 		dynamic "zones" {
 			for_each = var.location_zones
 			content {

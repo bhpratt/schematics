@@ -110,3 +110,17 @@ resource "ibm_container_vpc_cluster" "cluster" {
   #   name      = "${var.region}-3"
   # }
 }
+
+resource "ibm_resource_instance" "logdna_instance" {
+
+  name              = "test"
+  service           = "logdna"
+  resource_group_id = data.ibm_resource_group.resource_group.id
+  location          = var.region
+}
+
+resource "ibm_ob_logging" "logging" {
+  cluster              = var.cluster
+  instance_id          = var.logdna_instance_id
+  private_endpoint     = true
+}
