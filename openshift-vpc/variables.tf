@@ -1,3 +1,6 @@
+#IBM provider variables
+variable "ibmcloud_api_key" {}
+
 # COS variables
 variable "service_instance_name" {
   default = "roks-gen2"
