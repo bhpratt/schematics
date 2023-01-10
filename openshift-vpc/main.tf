@@ -137,3 +137,25 @@ resource "ibm_container_vpc_cluster" "cluster" {
 #   instance_id          = ibm_resource_instance.logdna_instance.guid
 #   private_endpoint     = true
 # }
+
+module "observability" {
+  source = "./observability"
+
+  region = var.region
+  resource_group = data.ibm_resource_group.resource_group.id
+  ibmcloud_api_key = var.ibmcloud_api_key
+
+}
+
+resource "ibm_resource_key" "resourceKey" {
+  name                 = "TestKey"
+  resource_instance_id = module.observability.logdna_instance_id
+  role                 = "Manager"
+}
+
+resource "ibm_ob_logging" "logging" {
+  depends_on           = [ibm_resource_key.resourceKey]
+  cluster              = ibm_container_vpc_cluster.cluster.id
+  instance_id          = module.observability.logdna_instance_guid
+  private_endpoint     = true
+}
