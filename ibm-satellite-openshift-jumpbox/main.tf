@@ -150,7 +150,7 @@ data "ibm_satellite_attach_host_script" "worker_script" {
   coreos_host   = var.worker_coreos_os
   custom_script = var.worker_custom_script
   host_provider = var.worker_host_provider
-  labels        = ["type:assigncluster"]
+  labels        = [var.auto_assign_labels]
 }
 
 //assign one host first to the control plane to allow creation of new default worker pool
@@ -265,7 +265,7 @@ resource "ibm_satellite_cluster" "cluster" {
     resource_group_id      = data.ibm_resource_group.resource_group.id
     operating_system       = var.cluster_operating_system
     wait_for_worker_update = true
-    host_labels            = ["type:assigncluster"]
+    host_labels            = [var.auto_assign_labels]
 
     dynamic "zones" {
         for_each = var.location_zones
@@ -293,11 +293,11 @@ resource "ibm_satellite_cluster" "cluster" {
 # }
 
 	resource "ibm_satellite_cluster_worker_pool" "create_wp" {
-		name               = "RHEL8"  
+		name               = "auto_assign_wp"  
 		cluster            = ibm_satellite_cluster.cluster.id
 		worker_count       = 1
-		host_labels        = ["type:assigncluster"]
-		operating_system   = "RHEL_8_64"
+		host_labels        = [var.auto_assign_labels]
+		operating_system   = var.cluster_operating_system
 		dynamic "zones" {
 			for_each = var.location_zones
 			content {
