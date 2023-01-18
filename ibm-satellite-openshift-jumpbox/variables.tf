@@ -173,13 +173,13 @@ variable "cluster_operating_system" {
 
 variable "worker_host_provider" {
   type = string
-  default = "ibm"
+  default = null
 }
 
 variable "worker_coreos_os" {
   description = "Whether the worker hosts are CoreOS"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "worker_custom_script" {
