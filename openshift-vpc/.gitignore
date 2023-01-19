@@ -1,5 +1,7 @@
 *.tfstate
 *.backup
+*.terraform*
+
 
 # Variable overrides
 *.tfvars
