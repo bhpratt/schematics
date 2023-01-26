@@ -140,9 +140,17 @@ variable "control_custom_script" {
 }
 
 variable "auto_assign_labels" {
-  description  = "Label to add to host assign and worker pool to allow nodes to auto assign to cluster"
+  description  = "Label to add to host assign ato allow nodes to auto assign to cluster"
   type         = string
   default      = "type:assigncluster"
+}
+
+variable "auto_assign_labels_cluster" {
+  description  = "Labels to add to the default worker pool to allow nodes to auto assign to cluster"
+  type         = set(string)
+  default      = [
+    "type:assigncluster",
+  ]
 }
 
 variable "control_image" {
@@ -205,9 +213,9 @@ variable "worker_image" {
   //"ibm-redhat-7-9-minimal-amd64-7"
   #  default     = "r014-b7cd149d-626d-4e55-9a40-cef90b3a74fb"
    //ibm-redhat-8-6-minimal-amd64-2 
-  #  default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
+   default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
      //coreos
-  default = "r014-ccc49740-c0b6-499b-8c76-d7ac9c250fdb"
+  # default = "r014-ccc49740-c0b6-499b-8c76-d7ac9c250fdb"
 }
 
 variable "worker_profile" {

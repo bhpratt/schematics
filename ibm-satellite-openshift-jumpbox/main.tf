@@ -265,7 +265,8 @@ resource "ibm_satellite_cluster" "cluster" {
     resource_group_id      = data.ibm_resource_group.resource_group.id
     operating_system       = var.cluster_operating_system
     wait_for_worker_update = true
-    # host_labels            = [var.auto_assign_labels]
+    host_labels            = var.auto_assign_labels_cluster
+    worker_count           = 1
 
     dynamic "zones" {
         for_each = var.location_zones
@@ -292,16 +293,16 @@ resource "ibm_satellite_cluster" "cluster" {
 #   host_provider = "ibm"
 # }
 
-	resource "ibm_satellite_cluster_worker_pool" "create_wp" {
-		name               = "auto_assign_wp"  
-		cluster            = ibm_satellite_cluster.cluster.id
-		worker_count       = 1
-		# host_labels        = [var.auto_assign_labels]
-		operating_system   = var.cluster_operating_system
-		dynamic "zones" {
-			for_each = var.location_zones
-			content {
-				id	= zones.value
-			}
-		}
-	}
+	# resource "ibm_satellite_cluster_worker_pool" "create_wp" {
+	# 	name               = "auto_assign_wp"  
+	# 	cluster            = ibm_satellite_cluster.cluster.id
+	# 	worker_count       = 0
+	# 	# host_labels        = [var.auto_assign_labels]
+	# 	operating_system   = var.cluster_operating_system
+	# 	dynamic "zones" {
+	# 		for_each = var.location_zones
+	# 		content {
+	# 			id	= zones.value
+	# 		}
+	# 	}
+	# }
