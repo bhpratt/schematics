@@ -122,7 +122,6 @@ resource "ibm_satellite_location" "location" {
 resource "ibm_is_instance" "ibm_host" {
   count = var.host_count
 
-  # depends_on     = [ibm_satellite_location.location]
   name           = "control-${random_string.id.result}-${count.index + 1}"
   vpc            = ibm_is_vpc.vpc1.id
   zone           = "${var.region}-1"
@@ -134,6 +133,13 @@ resource "ibm_is_instance" "ibm_host" {
 
   primary_network_interface {
     subnet = ibm_is_subnet.subnet1.id
+  }
+
+  #this block will ignore any changes on existing hosts to the attach script
+  lifecycle {
+    ignore_changes = [
+      user_data,
+    ]
   }
 }
 
@@ -230,7 +236,6 @@ resource "ibm_is_security_group_rule" "allow_jumpbox" {
 resource "ibm_is_instance" "ibm_worker" {
   count = var.worker_count
 
-  depends_on     = [ibm_satellite_location.location]
   name           = "worker-${random_string.id.result}-${count.index + 1}"
   vpc            = ibm_is_vpc.vpc1.id
   zone           = "${var.region}-1"
@@ -243,6 +248,13 @@ resource "ibm_is_instance" "ibm_worker" {
 
   primary_network_interface {
     subnet = ibm_is_subnet.subnet1.id
+  }
+
+  #this block will ignore any changes on existing hosts to the attach script
+  lifecycle {
+    ignore_changes = [
+      user_data,
+    ]
   }
 }
 
