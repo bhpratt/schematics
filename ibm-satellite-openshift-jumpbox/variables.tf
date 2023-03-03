@@ -36,7 +36,7 @@ variable "my_work_ip" {
   default     = null
 }
 
-variable "my_vpn_ip" {
+variable "my_extra_ip" {
   description = "Tertiary IP that is allowed access to the VPC jumpbox"
   default     = null
 }
