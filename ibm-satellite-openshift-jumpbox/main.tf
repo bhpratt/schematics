@@ -64,7 +64,7 @@ resource "ibm_is_security_group_rule" "rule2" {
 resource "ibm_is_security_group_rule" "rule3" {
   group      = ibm_is_security_group.group.id
   direction  = "inbound"
-  remote     = var.my_vpn_ip
+  remote     = var.my_extra_ip
   depends_on = [ibm_is_security_group.group]
 }
 
