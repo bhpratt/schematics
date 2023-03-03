@@ -21,7 +21,7 @@ variable "classic_access" {
 
 variable "region" {
   type        = string
-  default     = "us-east"
+  default     = "br-sao"
 }
 
 ### Jumpbox variables
@@ -36,10 +36,15 @@ variable "my_work_ip" {
   default     = null
 }
 
-variable "jumpbox_image" {
+variable "my_vpn_ip" {
+  description = "Tertiary IP that is allowed access to the VPC jumpbox"
+  default     = null
+}
+
+//ic is images
+variable "jumpbox_image_name" {
   type        = string
-  //ibm-centos-7-9-minimal-amd64-6 | ibmcloud is images
-  default     = "r014-ef74036d-4b4b-4ba2-b592-aaf2190e0079"
+  default     = "ibm-centos-7-9-minimal-amd64-9"
 }
 
 variable "jumpbox_floating_ip_name" {
@@ -65,11 +70,6 @@ variable "jumpbox_ssh_key" {
 ### Startup script variables
 
 variable "login_account_id" {}
-
-variable "login_region" {
-  type = string
-  default = "us-east"
-}
 
 variable "login_username" {}
 
@@ -97,13 +97,16 @@ variable "location" {
 variable "managed_from" {
   description = "The IBM Cloud region to manage your Satellite location from. Choose a region close to your on-prem data center for better performance."
   type        = string
-  default     = "wdc"
+  # default     = "wdc"
+  default     = "sao"
 }
 
 variable "location_zones" {
   description = "Allocate your hosts across these three zones"
   type        = list(string)
-  default     = ["us-east-1", "us-east-2", "us-east-3"]
+  # default     = ["us-east-1", "us-east-2", "us-east-3"]
+  default     = ["br-sao-1", "br-sao-2", "br-sao-3"]
+
 }
 
 variable "coreos_enabled" {
@@ -153,16 +156,24 @@ variable "auto_assign_labels_cluster" {
   ]
 }
 
-variable "control_image" {
-  description  = "Operating system image for the control plane hosts"
-  type         = string
-  //"ibm-redhat-7-9-minimal-amd64-7"
-  #  default     = "r014-b7cd149d-626d-4e55-9a40-cef90b3a74fb"
-  //coreos
-  # default = "r014-ccc49740-c0b6-499b-8c76-d7ac9c250fdb"
-  //ibm-redhat-8-6-minimal-amd64-2 
-   default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
+//ic is images
+variable "control_image_name" {
+  type        = string
+  default     = "ibm-redhat-8-6-minimal-amd64-4"
 }
+
+# variable "control_image" {
+#   description  = "Operating system image for the control plane hosts"
+#   type         = string
+#   //"ibm-redhat-7-9-minimal-amd64-7"
+#   #  default     = "r014-b7cd149d-626d-4e55-9a40-cef90b3a74fb"
+#   //coreos
+#   # default = "r014-ccc49740-c0b6-499b-8c76-d7ac9c250fdb"
+#   //ibm-redhat-8-6-minimal-amd64-2 
+#   #  default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
+#   //br-sao
+#   default = "r042-7ffb0b96-5937-4f24-931c-291c948223bf"
+# }
 
 variable "control_profile" {
   description  = "Profile information of control hosts"
@@ -207,15 +218,23 @@ variable "worker_count" {
   default     = 3
 }
 
-variable "worker_image" {
-  description = "Operating system image for the workers created"
+# variable "worker_image" {
+#   description = "Operating system image for the workers created"
+#   type        = string
+#   //"ibm-redhat-7-9-minimal-amd64-7"
+#   #  default     = "r014-b7cd149d-626d-4e55-9a40-cef90b3a74fb"
+#    //ibm-redhat-8-6-minimal-amd64-2 
+#   #  default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
+#   //br-sao
+#    default     = "r042-7ffb0b96-5937-4f24-931c-291c948223bf"
+#      //coreos
+#   # default = "r014-ccc49740-c0b6-499b-8c76-d7ac9c250fdb"
+# }
+
+//ic is images
+variable "worker_image_name" {
   type        = string
-  //"ibm-redhat-7-9-minimal-amd64-7"
-  #  default     = "r014-b7cd149d-626d-4e55-9a40-cef90b3a74fb"
-   //ibm-redhat-8-6-minimal-amd64-2 
-   default     = "r014-0254777a-9175-409b-8f7a-80ff9b350933"
-     //coreos
-  # default = "r014-ccc49740-c0b6-499b-8c76-d7ac9c250fdb"
+  default     = "ibm-redhat-8-6-minimal-amd64-4"
 }
 
 variable "worker_profile" {

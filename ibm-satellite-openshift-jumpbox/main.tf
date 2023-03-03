@@ -61,16 +61,30 @@ resource "ibm_is_security_group_rule" "rule2" {
   depends_on = [ibm_is_security_group.group]
 }
 
-//allow all outbound
 resource "ibm_is_security_group_rule" "rule3" {
+  group      = ibm_is_security_group.group.id
+  direction  = "inbound"
+  remote     = var.my_vpn_ip
+  depends_on = [ibm_is_security_group.group]
+}
+
+//allow all outbound
+resource "ibm_is_security_group_rule" "rule4" {
   group      = ibm_is_security_group.group.id
   direction  = "outbound"
   depends_on = [ibm_is_security_group_rule.rule1]
 }
 
+//image being used for the jumpbox
+data "ibm_is_image" "jumpbox" {
+  # name = "centos-7.x-amd64"
+  name = var.jumpbox_image_name
+}
+
 resource "ibm_is_instance" "jumpbox" {
   name    = "${var.jumpbox_name}-${random_string.id.result}"
-  image   = var.jumpbox_image
+  image   = data.ibm_is_image.jumpbox.id
+  # image = var.jumpbox_image
   profile = var.jumpbox_profile
   resource_group = data.ibm_resource_group.resource_group.id
 
@@ -86,7 +100,7 @@ resource "ibm_is_instance" "jumpbox" {
     API_KEY           = var.ibmcloud_api_key
     LOGIN_ACCOUNT     = var.login_account_id
     LOGIN_USERNAME    = var.login_username
-    LOGIN_REGION      = var.login_region
+    LOGIN_REGION      = var.region
     OPENSHIFT_VERSION = var.openshift_version
     SSH_KEY           = (trimspace(var.jumpbox_ssh_key))
     })
@@ -119,6 +133,11 @@ resource "ibm_satellite_location" "location" {
 
 }
 
+//image being used for the worker nodes
+data "ibm_is_image" "control" {
+  name = var.control_image_name
+}
+
 resource "ibm_is_instance" "ibm_host" {
   count = var.host_count
 
@@ -126,7 +145,7 @@ resource "ibm_is_instance" "ibm_host" {
   vpc            = ibm_is_vpc.vpc1.id
   zone           = "${var.region}-1"
   keys           = [var.ssh_key]
-  image          = var.control_image
+  image          = data.ibm_is_image.control.id
   profile        = var.control_profile
   resource_group = data.ibm_resource_group.resource_group.id
   user_data      = data.ibm_satellite_attach_host_script.control_script.host_script
@@ -163,7 +182,7 @@ data "ibm_satellite_attach_host_script" "worker_script" {
 resource "ibm_satellite_host" "assign_host_first" {
   location      = ibm_satellite_location.location.id
   host_id       = "control-${random_string.id.result}-1"
-  zone          = "us-east-1"
+  zone          = "${var.region}-1"
   host_provider = "ibm"
   depends_on     = [ibm_is_instance.ibm_host]
 }
@@ -188,7 +207,7 @@ resource "time_sleep" "wait_120_seconds" {
 resource "ibm_satellite_host" "assign_host_second" {
   location      = ibm_satellite_location.location.id
   host_id       = "control-${random_string.id.result}-2"
-  zone          = "us-east-2"
+  zone          = "${var.region}-2"
   host_provider = "ibm"
   depends_on     = [time_sleep.wait_120_seconds]
 }
@@ -196,7 +215,7 @@ resource "ibm_satellite_host" "assign_host_second" {
 resource "ibm_satellite_host" "assign_host_third" {
   location      = ibm_satellite_location.location.id
   host_id       = "control-${random_string.id.result}-3"
-  zone          = "us-east-3"
+  zone          = "${var.region}-3"
   host_provider = "ibm"
   depends_on     = [time_sleep.wait_120_seconds]
 }
@@ -204,7 +223,7 @@ resource "ibm_satellite_host" "assign_host_third" {
 resource "ibm_satellite_host" "assign_host_fourth" {
   location      = ibm_satellite_location.location.id
   host_id       = "control-${random_string.id.result}-4"
-  zone          = "us-east-1"
+  zone          = "${var.region}-1"
   host_provider = "ibm"
   depends_on     = [time_sleep.wait_120_seconds]
 }
@@ -212,7 +231,7 @@ resource "ibm_satellite_host" "assign_host_fourth" {
 resource "ibm_satellite_host" "assign_host_fifth" {
   location      = ibm_satellite_location.location.id
   host_id       = "control-${random_string.id.result}-5"
-  zone          = "us-east-2"
+  zone          = "${var.region}-2"
   host_provider = "ibm"
   depends_on     = [time_sleep.wait_120_seconds]
 }
@@ -220,7 +239,7 @@ resource "ibm_satellite_host" "assign_host_fifth" {
 resource "ibm_satellite_host" "assign_host_sixth" {
   location      = ibm_satellite_location.location.id
   host_id       = "control-${random_string.id.result}-6"
-  zone          = "us-east-3"
+  zone          = "${var.region}-3"
   host_provider = "ibm"
   depends_on     = [time_sleep.wait_120_seconds]
 }
@@ -233,6 +252,11 @@ resource "ibm_is_security_group_rule" "allow_jumpbox" {
   depends_on = [ibm_is_security_group.group]
 }
 
+//image being used for the worker nodes
+data "ibm_is_image" "worker" {
+  name = var.worker_image_name
+}
+
 resource "ibm_is_instance" "ibm_worker" {
   count = var.worker_count
 
@@ -240,7 +264,7 @@ resource "ibm_is_instance" "ibm_worker" {
   vpc            = ibm_is_vpc.vpc1.id
   zone           = "${var.region}-1"
   keys           = [var.ssh_key]
-  image          = var.worker_image
+  image          = data.ibm_is_image.worker.id
   profile        = var.worker_profile
   resource_group = data.ibm_resource_group.resource_group.id
   user_data      = data.ibm_satellite_attach_host_script.worker_script.host_script
