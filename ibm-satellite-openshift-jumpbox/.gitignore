@@ -8,5 +8,5 @@
 # Variable overrides
 *.tfvars
 
-notes.txt
+*.txt
 *.ign
