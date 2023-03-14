@@ -1,3 +1,8 @@
+locals {
+  //Names of the zones for the Satellite locations. These zones mirror VPC regions
+  location_zones = ["${var.region}-1", "${var.region}-2", "${var.region}-3"]
+}
+
 # name of resource group
 data "ibm_resource_group" "resource_group" {
   name = var.resource_group
@@ -120,7 +125,7 @@ resource "ibm_satellite_location" "location" {
   location          = "${var.location}-${random_string.id.result}"
   coreos_enabled    = var.coreos_enabled
   managed_from      = var.managed_from
-  zones             = var.location_zones
+  zones             = local.location_zones
   resource_group_id = data.ibm_resource_group.resource_group.id
 
   cos_config {
@@ -305,7 +310,7 @@ resource "ibm_satellite_cluster" "cluster" {
     worker_count           = 1
 
     dynamic "zones" {
-        for_each = var.location_zones
+        for_each = local.location_zones
         content {
             id  = zones.value
         }

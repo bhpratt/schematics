@@ -21,7 +21,7 @@ variable "classic_access" {
 
 variable "region" {
   type        = string
-  default     = "br-sao"
+  default     = "eu-de"
 }
 
 ### Jumpbox variables
@@ -97,15 +97,7 @@ variable "location" {
 variable "managed_from" {
   description = "The IBM Cloud region to manage your Satellite location from. Choose a region close to your on-prem data center for better performance."
   type        = string
-  default     = "sao"
-}
-
-variable "location_zones" {
-  description = "Allocate your hosts across these three zones"
-  type        = list(string)
-  # default     = ["us-east-1", "us-east-2", "us-east-3"]
-  default     = ["br-sao-1", "br-sao-2", "br-sao-3"]
-
+  default     = "fra"
 }
 
 variable "coreos_enabled" {
