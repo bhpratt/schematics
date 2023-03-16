@@ -1,6 +1,21 @@
+//Names of the zones for the Satellite location. These zones mirror VPC regions
 locals {
-  //Names of the zones for the Satellite locations. These zones mirror VPC regions
   location_zones = ["${var.region}-1", "${var.region}-2", "${var.region}-3"]
+}
+
+//maps IBM Cloud regions to Satellite locations. Source: https://cloud.ibm.com/docs/satellite?topic=satellite-sat-regions
+locals{
+  au-syd   = var.region == "au-syd"   ? "syd" : ""
+  br-sao   = var.region == "br-sao"   ? "sao" : ""
+  ca-tor 	 = var.region == "ca-tor"   ? "tor" : ""
+  eu-de    = var.region == "eu-de"    ? "fra" : ""
+  eu-gb    = var.region == "eu-gb"    ? "lon" : ""
+  jp-osa   = var.region == "jp-osa"   ? "osa" : ""
+  jp-tok   = var.region == "jp-tok"   ? "tok" : ""
+  us-south = var.region == "us-south" ? "dal" : ""
+  us-east  = var.region == "us-east"  ? "wdc" : ""
+
+  managed_from = coalesce(local.us-south, local.us-east, local.ca-tor, local.au-syd, local.br-sao, local.eu-de, local.eu-gb, local.jp-osa, local.jp-tok)
 }
 
 # name of resource group
@@ -124,7 +139,7 @@ output "instance_ip_addr" {
 resource "ibm_satellite_location" "location" {
   location          = "${var.location}-${random_string.id.result}"
   coreos_enabled    = var.coreos_enabled
-  managed_from      = var.managed_from
+  managed_from      = local.managed_from
   zones             = local.location_zones
   resource_group_id = data.ibm_resource_group.resource_group.id
 

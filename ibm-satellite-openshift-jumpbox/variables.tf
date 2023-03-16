@@ -19,9 +19,18 @@ variable "classic_access" {
   default     = "false"
 }
 
+//source: https://cloud.ibm.com/docs/satellite?topic=satellite-sat-regions
 variable "region" {
+  description = "Region to deploy VPC and Satellite location to"
   type        = string
-  default     = "eu-de"
+  default     = "br-sao"
+
+  validation {
+  condition = (
+      contains(["au-syd", "br-sao", "ca-tor", "eu-de", "eu-gb", "jp-osa", "jp-tok", "us-east", "us-south"], var.region) 
+  )
+  error_message = "Must choose a valid IBM Cloud region"
+  }
 }
 
 ### Jumpbox variables
@@ -92,12 +101,6 @@ variable "location" {
   description = "Location Name"
   type        = string
   default = "satellite-workshop"
-}
-
-variable "managed_from" {
-  description = "The IBM Cloud region to manage your Satellite location from. Choose a region close to your on-prem data center for better performance."
-  type        = string
-  default     = "fra"
 }
 
 variable "coreos_enabled" {
