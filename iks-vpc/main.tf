@@ -70,7 +70,7 @@ resource "ibm_container_vpc_cluster" "cluster" {
   worker_count         = var.worker_count
   resource_group_id    = data.ibm_resource_group.resource_group.id
   force_delete_storage = var.delete_storage
-  operating_system     = "UBUNTU_18_64"
+  # operating_system     = "UBUNTU_18_64"
   # Lets Schematics/Terraform start working with the cluster as soon as a node is available
   wait_till            = "OneWorkerNodeReady"
 
@@ -79,11 +79,11 @@ resource "ibm_container_vpc_cluster" "cluster" {
     name      = "${var.region}-1"
   }
 
-      lifecycle {
-        ignore_changes = [
-            flavor, operating_system, host_pool_id, secondary_storage, worker_count
-        ]
-    }
+    #   lifecycle {
+    #     ignore_changes = [
+    #         flavor, operating_system, host_pool_id, secondary_storage, worker_count
+    #     ]
+    # }
 
   # uncomment to create a multizone cluster
   # zones {
@@ -118,18 +118,18 @@ resource "ibm_container_vpc_cluster" "cluster" {
 #   }
 #  }
 
- 	resource "ibm_container_vpc_worker_pool" "default" {
-		worker_pool_name       = "test"
-		cluster                = ibm_container_vpc_cluster.cluster.id
-    vpc_id                 = ibm_is_vpc.vpc1.id
-		worker_count           = 3
-		operating_system       = "UBUNTU_20_64"
-    flavor               = var.flavor
+ 	# resource "ibm_container_vpc_worker_pool" "default" {
+	# 	worker_pool_name       = "test"
+	# 	cluster                = ibm_container_vpc_cluster.cluster.id
+  #   vpc_id                 = ibm_is_vpc.vpc1.id
+	# 	worker_count           = 3
+	# 	operating_system       = "UBUNTU_20_64"
+  #   flavor               = var.flavor
 
-  zones {
-    subnet_id = ibm_is_subnet.subnet1.id
-    name      = "${var.region}-1"
-  }
+  # zones {
+  #   subnet_id = ibm_is_subnet.subnet1.id
+  #   name      = "${var.region}-1"
+  # }
 
     # taints {
     #     key = "upgrade"
