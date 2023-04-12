@@ -5,12 +5,12 @@ variable "flavor" {
 }
 variable "worker_count" {
   type = number
-  default = 2
+  default = 3
 }
 
 variable "region" {
   type = string
-  default = "us-east"
+  default = "br-sao"
 }
 
 variable "resource_group" {
