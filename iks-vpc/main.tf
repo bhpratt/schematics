@@ -136,4 +136,4 @@ resource "ibm_container_vpc_cluster" "cluster" {
     #     value = "ubuntu20"
     #     effect = "NoSchedule"
     # }
- }
+#  }
