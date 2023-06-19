@@ -2,5 +2,5 @@ location_test_coreos
 
 # Variable overrides
 *.tfvars
-
+.DS_Store
 notes.txt
