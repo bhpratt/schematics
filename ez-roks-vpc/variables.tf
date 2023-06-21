@@ -1,5 +1,6 @@
 #IBM provider variables
-variable "ibmcloud_api_key" {}
+//uncomment if using local terraform
+# variable "ibmcloud_api_key" {}
 
 # COS variables
 variable "service_instance_name" {
