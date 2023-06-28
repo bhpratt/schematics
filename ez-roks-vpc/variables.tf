@@ -31,7 +31,6 @@ variable "number_of_zones" {
   }
 }
 
-
 # OpenShift variables
 variable "worker_flavor" {
   type        = string
