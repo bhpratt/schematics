@@ -53,7 +53,7 @@ data "ibm_container_cluster_versions" "cluster_versions" {
 resource "ibm_container_vpc_cluster" "cluster" {
   name                            = local.name
   vpc_id                          = ibm_is_vpc.vpc.id
-  flavor                          = var.flavor
+  flavor                          = var.worker_flavor
   kube_version                    = (var.kube_version != null ? var.kube_version : "${data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions[local.index]}_openshift")
   worker_count                    = var.workers_per_zone
   disable_public_service_endpoint = var.public_service_endpoint_disabled
