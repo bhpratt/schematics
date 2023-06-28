@@ -2,7 +2,7 @@ locals {
   # Pick the second to last from the list of supported OpenShift versions
   index = length(data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions) - 2
   # Add randomized string to name to prevent name duplication
-  name = "var.name + ${random_string.id.result}"
+  name = "${var.name}-${random_string.id.result}"
 }
 
 # Create random string to append to name
