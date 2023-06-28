@@ -1,3 +1,8 @@
+# Pick the second to last supported version of OpenShift as the version to use for the cluster
+locals {
+  index = length(data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions) - 2
+}
+
 # COS instance for registry backup
 resource "ibm_resource_instance" "cos_instance" {
   name     = var.service_instance_name
@@ -6,24 +11,26 @@ resource "ibm_resource_instance" "cos_instance" {
   location = "global"
 }
 
-# name of VPC
-resource "ibm_is_vpc" "vpc1" {
+# Name of VPC
+resource "ibm_is_vpc" "vpc" {
   name = var.vpc_name
 }
 
-# name of resource group
+# Name of resource group
 data "ibm_resource_group" "resource_group" {
   name = var.resource_group
 }
 
-# get the list of available cluster versions in IBM Cloud
+# List of available cluster versions in IBM Cloud
 data "ibm_container_cluster_versions" "cluster_versions" {
 }
-  # Include public gateway for connectivity outside of VPC
- resource "ibm_is_public_gateway" "gateway_subnet1" {
-    name       = "vpc-gen2-roks-gateway"
-    vpc        = ibm_is_vpc.vpc1.id
-    zone       = "${var.region}-1"
+
+# Public gateway to allow connectivity outside of the VPC
+ resource "ibm_is_public_gateway" "gateway_subnet" {
+    count      = var.zone_count
+    name       = "${var.region}-${count.index + 1}"
+    vpc        = ibm_is_vpc.vpc.id
+    zone       = "${var.region}-${count.index + 1}"
 
     //User can configure timeouts
     timeouts {
@@ -31,62 +38,22 @@ data "ibm_container_cluster_versions" "cluster_versions" {
     }
 }
 
-# uncomment to create multizone cluster w/3 public gateways
-#  resource "ibm_is_public_gateway" "gateway_subnet2" {
-#     name       = "vpc-gen2-roks-gateway-2"
-#     vpc        = ibm_is_vpc.vpc1.id
-#     zone       = "${var.region}-2"
-
-#     //User can configure timeouts
-#     timeouts {
-#         create = "90m"
-#     }
-# }
-
-#  resource "ibm_is_public_gateway" "gateway_subnet3" {
-#     name       = "vpc-gen2-roks-gateway-3"
-#     vpc        = ibm_is_vpc.vpc1.id
-#     zone       = "${var.region}-3"
-
-#     //User can configure timeouts
-#     timeouts {
-#         create = "90m"
-#     }
-# }
-
 # VPC subnets. Uses default CIDR range
-resource "ibm_is_subnet" "subnet1" {
-  name                     = "${var.region}-1"
-  vpc                      = ibm_is_vpc.vpc1.id
-  zone                     = "${var.region}-1"
+resource "ibm_is_subnet" "subnet" {
+  count                    = var.zone_count
+  name                     = "${var.region}-${count.index + 1}"
+  vpc                      = ibm_is_vpc.vpc.id
+  zone                     = "${var.region}-${count.index + 1}"
   total_ipv4_address_count = 256
-  public_gateway           = ibm_is_public_gateway.gateway_subnet1.id
-
+  public_gateway           = ibm_is_public_gateway.gateway_subnet[count.index].id
 }
 
-# uncomment to create multizone cluster
-# resource "ibm_is_subnet" "subnet2" {
-#   name                     = "${var.region}-2"
-#   vpc                      = ibm_is_vpc.vpc1.id
-#   zone                     = "${var.region}-2"
-#   total_ipv4_address_count = 256
-#   public_gateway           = ibm_is_public_gateway.gateway_subnet2.id
-# }
-
-# resource "ibm_is_subnet" "subnet3" {
-#   name                     = "${var.region}-3"
-#   vpc                      = ibm_is_vpc.vpc1.id
-#   zone                     = "${var.region}-3"
-#   total_ipv4_address_count = 256
-#   public_gateway           = ibm_is_public_gateway.gateway_subnet3.id
-# }
-
-# ROKS cluster. Single zone. Kube version by default will take the 3rd in the list of the valid openshift versions given in the output of `ibmcloud oc versions`
+# OpenShift cluster. Defaults to single zone. Version by default will take the 2nd to last in the list of the valid openshift versions given in the output of `ibmcloud oc versions`
 resource "ibm_container_vpc_cluster" "cluster" {
   name                            = var.name
-  vpc_id                          = ibm_is_vpc.vpc1.id
+  vpc_id                          = ibm_is_vpc.vpc.id
   flavor                          = var.flavor
-  kube_version                    = (var.kube_version != null ? var.kube_version : "${data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions[2]}_openshift")
+  kube_version                    = (var.kube_version != null ? var.kube_version : "${data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions[local.index]}_openshift")
   worker_count                    = var.worker_count
   disable_public_service_endpoint = var.public_service_endpoint_disabled
   resource_group_id               = data.ibm_resource_group.resource_group.id
@@ -94,19 +61,12 @@ resource "ibm_container_vpc_cluster" "cluster" {
   wait_till                       = "OneWorkerNodeReady"
 
 
-  zones {
-    subnet_id = ibm_is_subnet.subnet1.id
-    name      = "${var.region}-1"
+
+    dynamic zones {
+    for_each = ibm_is_subnet.subnet
+    content {
+      name      = zones.value.name
+      subnet_id = zones.value.id
+    }
   }
-
-  # uncomment to create a multizone cluster
-  # zones {
-  #   subnet_id = ibm_is_subnet.subnet2.id
-  #   name      = "${var.region}-2"
-  # }
-
-  # zones {
-  #   subnet_id = ibm_is_subnet.subnet3.id
-  #   name      = "${var.region}-3"
-  # }
 }

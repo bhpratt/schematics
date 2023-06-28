@@ -2,20 +2,9 @@
 //uncomment if using local terraform
 # variable "ibmcloud_api_key" {}
 
-# COS variables
-variable "service_instance_name" {
-  default = "roks-gen2"
-}
+# VPC variables
 
-variable "service_offering" {
-  default = "cloud-object-storage"
-}
-
-variable "plan" {
-  default = "standard"
-}
-
-# IKS/ROKS Variables
+# OpenShift variables
 variable "flavor" {
   default = "bx2.4x16"
 }
@@ -46,4 +35,21 @@ variable "kube_version" {
 
 variable "vpc_name" {
   default = "vpz-openshift"
+}
+
+variable "zone_count" {
+  default = 3
+}
+
+# Cloud Object Storage variables
+variable "service_instance_name" {
+  default = "roks-gen2"
+}
+
+variable "service_offering" {
+  default = "cloud-object-storage"
+}
+
+variable "plan" {
+  default = "standard"
 }
