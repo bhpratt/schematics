@@ -3,26 +3,14 @@ locals {
   index = length(data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions) - 2
 }
 
-# COS instance for registry backup
-resource "ibm_resource_instance" "cos_instance" {
-  name     = var.service_instance_name
-  service  = var.service_offering
-  plan     = var.plan
-  location = "global"
-}
-
-# Name of VPC
-resource "ibm_is_vpc" "vpc" {
-  name = var.vpc_name
-}
-
 # Name of resource group
 data "ibm_resource_group" "resource_group" {
   name = var.resource_group
 }
 
-# List of available cluster versions in IBM Cloud
-data "ibm_container_cluster_versions" "cluster_versions" {
+# Virtual Private Cloud (VPC)
+resource "ibm_is_vpc" "vpc" {
+  name = var.vpc_name
 }
 
 # Public gateway to allow connectivity outside of the VPC
@@ -48,6 +36,10 @@ resource "ibm_is_subnet" "subnet" {
   public_gateway           = ibm_is_public_gateway.gateway_subnet[count.index].id
 }
 
+# List of available cluster versions in IBM Cloud
+data "ibm_container_cluster_versions" "cluster_versions" {
+}
+
 # OpenShift cluster. Defaults to single zone. Version by default will take the 2nd to last in the list of the valid openshift versions given in the output of `ibmcloud oc versions`
 resource "ibm_container_vpc_cluster" "cluster" {
   name                            = var.name
@@ -69,4 +61,12 @@ resource "ibm_container_vpc_cluster" "cluster" {
       subnet_id = zones.value.id
     }
   }
+}
+
+# COS instance for cluster registry backup
+resource "ibm_resource_instance" "cos_instance" {
+  name     = var.service_instance_name
+  service  = var.service_offering
+  plan     = var.plan
+  location = "global"
 }
