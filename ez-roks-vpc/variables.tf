@@ -1,6 +1,6 @@
-#IBM provider variables
+# IBM provider variables
 # uncomment if using local terraform
-variable "ibmcloud_api_key" {}
+# variable "ibmcloud_api_key" {}
 
 # Global variables
 variable "name" {
