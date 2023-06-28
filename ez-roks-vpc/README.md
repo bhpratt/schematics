@@ -14,7 +14,7 @@ To create using Schematics:
 1. Log in to IBM Cloud
 2. Select IBM Cloud Schematics
 3. Create a work space.
-4. For `GitHub, GitLab or Bitbucket repository URL`, input this URL: `https://github.com/bhpratt/schematics/tree/27471fb20c7323024f6af01d892ae6c35c390964/ez-roks-vpc`
+4. For `GitHub, GitLab or Bitbucket repository URL`, input this URL: `https://github.com/bhpratt/schematics/tree/master/ez-roks-vpc`
 5. Uncheck `Use Full Repository` and select `Next`.
 6. Complete `Workplace Details` as desired, select `Next`, then select `Create` to populate your new Schematics workspace.
 7. Once the workspace is completed, select `Apply plan` to create your VPC and OpenShift cluster.
