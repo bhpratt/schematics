@@ -61,8 +61,6 @@ resource "ibm_container_vpc_cluster" "cluster" {
   cos_instance_crn                = ibm_resource_instance.cos_instance.id
   wait_till                       = "OneWorkerNodeReady"
 
-
-
   dynamic "zones" {
     for_each = ibm_is_subnet.subnet
     content {
