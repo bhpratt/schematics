@@ -6,10 +6,10 @@ locals {
 }
 
 # Create random string to append to name
- resource "random_string" "id" {
-  length = 4
+resource "random_string" "id" {
+  length  = 4
   special = false
-  upper = false
+  upper   = false
 }
 
 # Name of resource group
@@ -23,16 +23,16 @@ resource "ibm_is_vpc" "vpc" {
 }
 
 # Public gateway to allow connectivity outside of the VPC
- resource "ibm_is_public_gateway" "gateway_subnet" {
-    count      = var.number_of_zones
-    name       = "${var.region}-${count.index + 1}"
-    vpc        = ibm_is_vpc.vpc.id
-    zone       = "${var.region}-${count.index + 1}"
+resource "ibm_is_public_gateway" "gateway_subnet" {
+  count = var.number_of_zones
+  name  = "${var.region}-${count.index + 1}"
+  vpc   = ibm_is_vpc.vpc.id
+  zone  = "${var.region}-${count.index + 1}"
 
-    //User can configure timeouts
-    timeouts {
-        create = "90m"
-    }
+  //User can configure timeouts
+  timeouts {
+    create = "90m"
+  }
 }
 
 # VPC subnets. Uses default CIDR range
@@ -63,7 +63,7 @@ resource "ibm_container_vpc_cluster" "cluster" {
 
 
 
-    dynamic zones {
+  dynamic "zones" {
     for_each = ibm_is_subnet.subnet
     content {
       name      = zones.value.name
