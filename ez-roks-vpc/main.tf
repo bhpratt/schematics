@@ -25,7 +25,7 @@ resource "ibm_is_vpc" "vpc" {
 # Public gateway to allow connectivity outside of the VPC
 resource "ibm_is_public_gateway" "gateway_subnet" {
   count = var.number_of_zones
-  name  = "${local.name}-subnet-${count.index + 1}"
+  name  = "${local.name}-publicgateway-${count.index + 1}"
   vpc   = ibm_is_vpc.vpc.id
   zone  = "${var.region}-${count.index + 1}"
 
@@ -38,7 +38,7 @@ resource "ibm_is_public_gateway" "gateway_subnet" {
 # VPC subnets. Uses default CIDR range
 resource "ibm_is_subnet" "subnet" {
   count                    = var.number_of_zones
-  name                     = "${local.name}-publicgateway-${count.index + 1}"
+  name                     = "${local.name}-subnet-${count.index + 1}"
   vpc                      = ibm_is_vpc.vpc.id
   zone                     = "${var.region}-${count.index + 1}"
   total_ipv4_address_count = 256

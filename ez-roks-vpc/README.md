@@ -1,4 +1,4 @@
-# EZ-OPENSHIFT-VPC Cluster
+# EZ-OPENSHIFT-VPC
 
 Creates a single-zone VPC Red Hat Openshift on IBM Cloud cluster in US East. To be used with Terraform or IBM Cloud Schematics. Allows for a quick build and teardown of an Openshift cluster and VPC environment.
 
