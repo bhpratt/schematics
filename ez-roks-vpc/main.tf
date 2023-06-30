@@ -64,7 +64,7 @@ resource "ibm_container_vpc_cluster" "cluster" {
   dynamic "zones" {
     for_each = ibm_is_subnet.subnet
     content {
-      name      = zones.value.name
+      name      = zones.value.zone
       subnet_id = zones.value.id
     }
   }
