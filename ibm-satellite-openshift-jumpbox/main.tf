@@ -9,6 +9,7 @@ locals{
   br-sao   = var.region == "br-sao"   ? "sao" : ""
   ca-tor 	 = var.region == "ca-tor"   ? "tor" : ""
   eu-de    = var.region == "eu-de"    ? "fra" : ""
+  eu-es    = var.region == "eu-es"    ? "mad" : ""
   eu-gb    = var.region == "eu-gb"    ? "lon" : ""
   jp-osa   = var.region == "jp-osa"   ? "osa" : ""
   jp-tok   = var.region == "jp-tok"   ? "tok" : ""
