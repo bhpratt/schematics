@@ -150,10 +150,17 @@ variable "auto_assign_labels_cluster" {
   ]
 }
 
+variable "host_link_agent_endpoint" {
+  description  = "Use Satellite Link to reduce outbound connections to the public internet"
+  type         = bool
+  default      = false
+}
+
 //ic is images
 variable "control_image_name" {
   type        = string
-  default     = "ibm-redhat-8-6-minimal-amd64-4"
+  default     = "ibm-redhat-8-8-minimal-amd64-3"
+  # default     = "ibm-redhat-8-6-minimal-amd64-4"
 }
 
 variable "control_profile" {

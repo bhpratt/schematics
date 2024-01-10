@@ -188,7 +188,9 @@ data "ibm_satellite_attach_host_script" "control_script" {
   coreos_host   = var.control_coreos_os
   custom_script = var.control_custom_script
   host_provider = var.control_host_provider
-
+  # host_link_agent_endpoint = "c-01-ws.br-sao.link.satellite.cloud.ibm.com"
+  # host_link_agent_endpoint = var.host_link_agent_endpoint == true ? "c-01-ws.us-east.link.satellite.cloud.ibm.com" : null
+  host_link_agent_endpoint = var.host_link_agent_endpoint == true ? "c-01-ws.${var.region}.link.satellite.cloud.ibm.com" : null
 }
 
 data "ibm_satellite_attach_host_script" "worker_script" {
@@ -197,6 +199,9 @@ data "ibm_satellite_attach_host_script" "worker_script" {
   custom_script = var.worker_custom_script
   host_provider = var.worker_host_provider
   labels        = [var.auto_assign_labels]
+  # host_link_agent_endpoint = "c-01-ws.br-sao.link.satellite.cloud.ibm.com"
+  host_link_agent_endpoint = var.host_link_agent_endpoint == true ? "c-01-ws.${var.region}.link.satellite.cloud.ibm.com" : null
+
 }
 
 //assign one host first to the control plane to allow creation of new default worker pool
