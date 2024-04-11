@@ -16,7 +16,7 @@ data "ibm_resource_group" "resource_group" {
 
 module "observability_agents" {
   source                        = "terraform-ibm-modules/observability-agents/ibm"
-  version                       = "1.21.1"
+  version                       = "1.23.0"
   cluster_id                    = var.cluster_id
   cluster_resource_group_id     = data.ibm_resource_group.resource_group.id
   log_analysis_instance_region  = var.logging_region
