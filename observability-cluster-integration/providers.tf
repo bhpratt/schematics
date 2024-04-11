@@ -18,7 +18,7 @@ terraform {
 ##############################################################################
 
 provider "ibm" {
-  region = var.region
+  region = var.cluster_region
   # uncomment if using local terraform
   ibmcloud_api_key = var.ibmcloud_api_key
 }
