@@ -1,3 +1,8 @@
+# data "ibm_container_cluster_config" "cluster_config" {
+#   # update this value with the Id of the cluster where these agents will be provisioned
+#   cluster_name_id = ibm_container_vpc_cluster.cluster.id
+# }
+
 locals {
   # Pick the second to last from the list of supported OpenShift versions
   index = length(data.ibm_container_cluster_versions.cluster_versions.valid_openshift_versions) - 2
@@ -77,3 +82,21 @@ resource "ibm_resource_instance" "cos_instance" {
   plan     = var.plan
   location = "global"
 }
+
+##############################################################################
+# Observability Agents
+##############################################################################
+
+
+# module "observability_agents" {
+#   # source                        = "git@github.com:terraform-ibm-modules/terraform-ibm-observability-agents.git?ref=1.21.1"
+#   source                        = "terraform-ibm-modules/observability-agents/ibm"
+#   version                       = "1.21.1"
+#   cluster_id                    = ibm_container_vpc_cluster.cluster.id
+#   cluster_resource_group_id     = data.ibm_resource_group.resource_group.id
+#   log_analysis_instance_region  = "us-south"
+#   log_analysis_ingestion_key    = "6b39df3178511574b1a2c14abda97411"
+#   cloud_monitoring_access_key   = "94b3777f-54e9-4a2f-b90f-2b931b09cb69"
+#   cloud_monitoring_instance_region = "us-east"
+#   log_analysis_add_cluster_name = true
+# }

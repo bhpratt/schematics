@@ -1,7 +1,7 @@
 
 variable "flavor" {
   type = string
-  default = "bx2.2x8"
+  default = "bx2.4x16"
 }
 variable "worker_count" {
   type = number
