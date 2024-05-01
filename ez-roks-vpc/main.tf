@@ -57,7 +57,7 @@ resource "ibm_container_vpc_cluster" "cluster" {
   name                            = local.name
   vpc_id                          = ibm_is_vpc.vpc.id
   flavor                          = var.worker_flavor
-  kube_version                    = (var.kube_version != null ? var.kube_version : "${data.ibm_container_cluster_versions.cluster_versions.default_openshift_version}")
+  kube_version                    = (var.kube_version != null ? var.kube_version : "${data.ibm_container_cluster_versions.cluster_versions.default_openshift_version}_openshift")
   worker_count                    = var.workers_per_zone
   disable_public_service_endpoint = var.public_service_endpoint_disabled
   operating_system                = var.operating_system
