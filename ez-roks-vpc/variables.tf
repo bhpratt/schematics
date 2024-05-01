@@ -32,6 +32,12 @@ variable "number_of_zones" {
 }
 
 # OpenShift variables
+variable "operating_system" {
+  type        = string
+  default     = "REDHAT_8_64"
+  description = "Operating system for default worker pool. Options are REDHAT_8_64 or RHCOS"
+}
+
 variable "worker_flavor" {
   type        = string
   default     = "bx2.4x16"
@@ -53,7 +59,7 @@ variable "public_service_endpoint_disabled" {
 variable "kube_version" {
   type        = string
   default     = null
-  description = "The OpenShift version. This terraform script chooses dynamically from the list of supported versions."
+  description = "The OpenShift version. If none selected, the default openshift version is used."
 }
 
 # Cloud Object Storage (COS) variables
