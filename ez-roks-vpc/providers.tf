@@ -21,7 +21,7 @@ terraform {
 provider "ibm" {
   region = var.region
   # uncomment if using local terraform
-  ibmcloud_api_key = var.ibmcloud_api_key
+  # ibmcloud_api_key = var.ibmcloud_api_key
 }
 
 # provider "helm" {
