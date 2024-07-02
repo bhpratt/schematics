@@ -9,7 +9,7 @@ variable "cluster_id" {
   description = "ID of the cluster to deploy observability agents to."
 }
 
-variable "cluster_region" {
+variable "region" {
   type        = string
   default     = "us-east"
   description = "The region of the cluster."
