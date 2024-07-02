@@ -1,0 +1,11 @@
+# Terraform files from local builds
+.terraform
+*.hcl
+*.tfstate
+*.info
+*.backup
+
+# Variable overrides
+*.tfvars
+
+notes.txt
