@@ -76,7 +76,7 @@ resource "ibm_container_vpc_cluster" "cluster" {
   worker_count         = var.worker_count
   resource_group_id    = data.ibm_resource_group.resource_group.id
   force_delete_storage = var.delete_storage
-  # operating_system     = "UBUNTU_18_64"
+  operating_system     = var.operating_system
   # Lets Schematics/Terraform start working with the cluster as soon as a node is available
   wait_till            = "OneWorkerNodeReady"
 
@@ -84,12 +84,6 @@ resource "ibm_container_vpc_cluster" "cluster" {
     subnet_id = ibm_is_subnet.subnet1.id
     name      = "${var.region}-1"
   }
-
-    #   lifecycle {
-    #     ignore_changes = [
-    #         flavor, operating_system, host_pool_id, secondary_storage, worker_count
-    #     ]
-    # }
 
   # uncomment to create a multizone cluster
   # zones {
@@ -108,56 +102,4 @@ resource "ibm_container_vpc_cluster" "cluster" {
 #   for_each = { for i, v in ibm_container_vpc_cluster.cluster.albs: i => v}
 #   alb_id = each.value.id
 #   enable = (each.value.alb_type == "private" && local.enable_private_alb) || (each.value.alb_type == "public" && local.enable_public_alb) ? true : false
-# }
-
-# 	resource "ibm_container_vpc_worker_pool" "default" {
-# 		worker_pool_name       = "default"
-# 		cluster                = ibm_container_vpc_cluster.cluster.id
-#     vpc_id                 = "r042-84ba361f-78d4-4ec2-b114-0da1bcd9de70"
-# 		worker_count           = 3
-# 		operating_system       = "UBUNTU_18_64"
-#     flavor               = var.flavor
-
-#   zones {
-#     subnet_id = ibm_is_subnet.subnet1.id
-#     name      = "${var.region}-1"
-#   }
-#  }
-
- 	# resource "ibm_container_vpc_worker_pool" "default" {
-	# 	worker_pool_name       = "test"
-	# 	cluster                = ibm_container_vpc_cluster.cluster.id
-  #   vpc_id                 = ibm_is_vpc.vpc1.id
-	# 	worker_count           = 3
-	# 	operating_system       = "UBUNTU_20_64"
-  #   flavor               = var.flavor
-
-  # zones {
-  #   subnet_id = ibm_is_subnet.subnet1.id
-  #   name      = "${var.region}-1"
-  # }
-
-    # taints {
-    #     key = "upgrade"
-    #     value = "ubuntu20"
-    #     effect = "NoSchedule"
-    # }
-#  }
-
-##############################################################################
-# Observability Agents
-##############################################################################
-
-
-# module "observability_agents" {
-#   # source                        = "git@github.com:terraform-ibm-modules/terraform-ibm-observability-agents.git?ref=1.21.1"
-#   source                        = "terraform-ibm-modules/observability-agents/ibm"
-#   version                       = "1.21.1"
-#   cluster_id                    = ibm_container_vpc_cluster.cluster.id
-#   cluster_resource_group_id     = local.rg_id
-#   log_analysis_instance_region  = "us-south"
-#   log_analysis_ingestion_key    = "6b39df3178511574b1a2c14abda97411"
-#   cloud_monitoring_access_key   = "94b3777f-54e9-4a2f-b90f-2b931b09cb69"
-#   cloud_monitoring_instance_region = "us-east"
-#   log_analysis_add_cluster_name = true
 # }

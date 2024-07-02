@@ -20,15 +20,20 @@ variable "resource_group" {
 
 variable "name" {
   type = string
-  default = "iks-vpc-k8s"
+  default = "iks-vpc"
 }
 
 variable "vpc_name" {
   type = string
-  default = "iks-vpc-k8s"
+  default = "iks-vpc"
 }
 
 variable "kube_version" {
+  type = string
+  default = null
+}
+
+variable "operating_system" {
   type = string
   default = null
 }
