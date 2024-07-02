@@ -53,7 +53,7 @@ variable "my_extra_ip" {
 //ic is images
 variable "jumpbox_image_name" {
   type        = string
-  default     = "ibm-centos-7-9-minimal-amd64-9"
+  default     = "ibm-centos-7-9-minimal-amd64-12"
 }
 
 variable "jumpbox_floating_ip_name" {
@@ -200,6 +200,13 @@ variable "worker_custom_script" {
   default = null
 }
 
+//temp for adding rhel hosts
+# variable "worker_custom_script_rhel" {
+#   type = string
+#   default = null
+# }
+//end temp section
+
 variable "worker_count" {
   description = "The total number of ibm host to create for cluster"
   type        = number
@@ -209,7 +216,7 @@ variable "worker_count" {
 //ic is images
 variable "worker_image_name" {
   type        = string
-  default     = "ibm-redhat-8-6-minimal-amd64-4"
+  default     = "ibm-redhat-8-8-minimal-amd64-3"
 }
 
 variable "worker_profile" {

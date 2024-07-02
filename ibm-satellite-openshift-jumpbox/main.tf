@@ -308,6 +308,49 @@ resource "ibm_is_instance" "ibm_worker" {
   }
 }
 
+//temp section to add rhel hosts in addition to rhcos hosts
+//image being used for the worker nodes
+# data "ibm_satellite_attach_host_script" "worker_script_rhel" {
+#   location      = ibm_satellite_location.location.id
+#   coreos_host   = false
+#   custom_script = var.worker_custom_script_rhel
+#   host_provider = null
+#   labels        = [var.auto_assign_labels]
+#   # host_link_agent_endpoint = "c-01-ws.br-sao.link.satellite.cloud.ibm.com"
+#   host_link_agent_endpoint = var.host_link_agent_endpoint == true ? "c-01-ws.${var.region}.link.satellite.cloud.ibm.com" : null
+
+# }
+
+# data "ibm_is_image" "worker_rhel" {
+#   name = "ibm-redhat-8-8-minimal-amd64-3"
+# }
+
+# resource "ibm_is_instance" "ibm_worker_rhel" {
+#   count = var.worker_count
+
+#   name           = "worker-${random_string.id.result}-${count.index + 4}"
+#   vpc            = ibm_is_vpc.vpc1.id
+#   zone           = "${var.region}-1"
+#   keys           = [var.ssh_key]
+#   image          = data.ibm_is_image.worker_rhel.id
+#   profile        = var.worker_profile
+#   resource_group = data.ibm_resource_group.resource_group.id
+#   user_data      = data.ibm_satellite_attach_host_script.worker_script.host_script
+
+
+#   primary_network_interface {
+#     subnet = ibm_is_subnet.subnet1.id
+#   }
+
+#   #this block will ignore any changes on existing hosts to the attach script
+#   lifecycle {
+#     ignore_changes = [
+#       user_data,
+#     ]
+#   }
+# }
+//end temp section
+
 # get the list of available cluster versions in IBM Cloud
 data "ibm_container_cluster_versions" "cluster_versions" {
 }
