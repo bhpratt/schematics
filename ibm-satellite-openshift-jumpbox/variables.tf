@@ -85,7 +85,7 @@ variable "login_username" {}
 //version of oc cli to install on jumpbox
 variable "openshift_version" {
   type = string
-  default = "4.10.0"
+  default = "4.16.0"
 }
 
 variable "security_group_name" {
